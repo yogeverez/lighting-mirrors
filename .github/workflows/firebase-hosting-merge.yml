@@ -43,7 +43,9 @@ jobs:
           cmd: install # will run `yarn install` command
       - run: CI=false
       - name: build
-        run: npm run build
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build # will run `yarn build` command
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
