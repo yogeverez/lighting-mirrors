@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: "14"
           cache: "yarn"
-      - run: yarn install --frozen-lockfile # optional, --immutable
+      - run: yarn install # optional, --immutable
       - run: CI=false yarn build
       #   uses: actions/checkout@v2
       # - name: Install dependencies
