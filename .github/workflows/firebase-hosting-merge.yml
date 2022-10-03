@@ -28,7 +28,8 @@ jobs:
         uses: actions/checkout@master
       - name: Install Dependencies
         uses: actions/checkout@v2
-        run: yarn install && CI='' yarn build
+      - run: CI=false
+      - run: yarn install && CI='' yarn build
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
