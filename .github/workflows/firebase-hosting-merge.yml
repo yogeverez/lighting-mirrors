@@ -8,49 +8,54 @@ name: Deploy to Firebase Hosting on merge
       - main
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Install Dependencies
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: install # will run `yarn install` command
-      - name: build
-        run: npm CI=false && npm run build
-        # uses: borales/actions-yarn@v3.0.0
-        # with:
-        #   cmd: build # will run `yarn build` command
-      # - name: Install Dependencies
-      #   run: npm install
-      # - name: Build
-      #   run: npm run build
-      - name: Archive Production Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: dist
-          path: dist
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: dist
-          path: dist
-      - name: Deploy to Firebase
-        uses: FirebaseExtended/action-hosting-deploy@v0
+  build_and_deploy:
+      runs-on: ubuntu-latest
+      needs: cypress-run
+      steps:
+        - uses: actions/checkout@v2
+        - run: yarn install && CI='' yarn build
+        - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
           channelId: live
           projectId: lighting-mirrors
+  # build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@master
+  #     - name: Install Dependencies
+  #       uses: borales/actions-yarn@v3.0.0
+  #       with:
+  #         cmd: install # will run `yarn install` command
+  #     - name: build
+  #       run: npm CI=false && npm run build
+  #     - name: Archive Production Artifact
+  #       uses: actions/upload-artifact@master
+  #       with:
+  #         name: dist
+  #         path: dist
+  # deploy:
+  #   name: Deploy
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@master
+  #     - name: Download Artifact
+  #       uses: actions/download-artifact@master
+  #       with:
+  #         name: dist
+  #         path: dist
+  #     - name: Deploy to Firebase
+  #       uses: FirebaseExtended/action-hosting-deploy@v0
+  #       with:
+  #         repoToken: "${{ secrets.GITHUB_TOKEN }}"
+  #         firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
+  #         channelId: live
+  #         projectId: lighting-mirrors
 # jobs:
 #   build_and_deploy:
 #     runs-on: ubuntu-latest
