@@ -19,9 +19,10 @@ jobs:
         with:
           cmd: install # will run `yarn install` command
       - name: Build
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: build # will run `yarn build` command
+        run: CI=false npm run build
+        # uses: borales/actions-yarn@v3.0.0
+        # with:
+        #   cmd: build # will run `yarn build` command
       # - name: Install Dependencies
       #   run: npm install
       # - name: Build
@@ -31,25 +32,25 @@ jobs:
         with:
           name: dist
           path: dist
-  # deploy:
-  #   name: Deploy
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Repo
-  #       uses: actions/checkout@@v2
-  #     - name: Download Artifact
-  #       uses: actions/download-artifact@@v2
-  #       with:
-  #         name: dist
-  #         path: dist
-  #     - name: Deploy to Firebase
-  #       - uses: FirebaseExtended/action-hosting-deploy@v0
-  #       with:
-  #         repoToken: "${{ secrets.GITHUB_TOKEN }}"
-  #         firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
-  #         channelId: live
-  #         projectId: lighting-mirrors
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+      - name: Deploy to Firebase
+        - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
+          channelId: live
+          projectId: lighting-mirrors
 # jobs:
 #   build_and_deploy:
 #     runs-on: ubuntu-latest
