@@ -18,7 +18,7 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install # will run `yarn install` command
-      - name: Build
+      - name: build
         run: CI=false npm run build
         # uses: borales/actions-yarn@v3.0.0
         # with:
@@ -45,7 +45,7 @@ jobs:
           name: dist
           path: dist
       - name: Deploy to Firebase
-        - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
