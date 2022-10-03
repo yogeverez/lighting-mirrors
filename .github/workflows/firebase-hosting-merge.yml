@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Reclaim cache directory
+        run: chown -R 1001:1001 /home/runner/work/lighting-mirrors/lighting-mirrors/node_modules/.cache && echo "pwn dat cache"
       - name: Install dependencies
         uses: borales/actions-yarn@v3.0.0
         with:
