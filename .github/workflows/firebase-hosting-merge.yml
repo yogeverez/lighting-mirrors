@@ -20,8 +20,16 @@ jobs:
   #         firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
   #         channelId: live
   #         projectId: lighting-mirrors
+  configure:
+    runs-on: ubuntu-latest
+    outputs:
+      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
+    steps:
+      - id: get-user
+        run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
   build_and_deploy:
     name: Build and deploy
+    needs: configure
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,8 +38,6 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install # will run `yarn install` command
-      - name: Reclaim cache directory
-        run: chown -R 1001:1001 /home/runner/work/lighting-mirrors/lighting-mirrors/node_modules/.cache && echo "pwn dat cache"
       - run: CI=false
       - name: build
         run: npm run build
