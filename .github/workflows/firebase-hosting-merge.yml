@@ -35,7 +35,7 @@ jobs:
       image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
       options: --user ${{ needs.configure.outputs.uid_gid }}
     steps:
-      - name: Checkout
+      # - name: Checkout
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
