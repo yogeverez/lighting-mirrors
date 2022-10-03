@@ -20,20 +20,20 @@ jobs:
   #         firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
   #         channelId: live
   #         projectId: lighting-mirrors
-  configure:
-    runs-on: ubuntu-latest
-    outputs:
-      uid_gid: ${{ steps.get-user.outputs.uid_gid }}
-    steps:
-      - id: get-user
-        run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
+  # configure:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     uid_gid: ${{ steps.get-user.outputs.uid_gid }}
+  #   steps:
+  #     - id: get-user
+  #       run: echo "::set-output name=uid_gid::$(id -u):$(id -g)"
   build_and_deploy:
     name: Build and deploy
-    needs: configure
+    # needs: configure
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
-      options: --user ${{ needs.configure.outputs.uid_gid }}
+    # container:
+    #   image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
+    #   options: --user ${{ needs.configure.outputs.uid_gid }}
     steps:
       # - name: Checkout
       - uses: actions/checkout@v3
