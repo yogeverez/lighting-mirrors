@@ -41,11 +41,12 @@ jobs:
         uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install # will run `yarn install` command
-      - run: CI=false
+      # - run: CI=false
       - name: build
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: build # will run `yarn build` command
+        run: CI=false yarn build
+        # uses: borales/actions-yarn@v3.0.0
+        # with:
+        #   cmd: build # will run `yarn build` command
       - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
