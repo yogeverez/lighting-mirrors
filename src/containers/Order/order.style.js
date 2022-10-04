@@ -63,6 +63,15 @@ export const Content = styled.div`
       line-height: 1.6;
     }
   }
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+  }
+  .ant-radio-wrapper-checked .inner {
+    background: #1890ff;
+  }
 `;
 
 export default Section;

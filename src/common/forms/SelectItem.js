@@ -15,7 +15,6 @@ const SelectItem = (props) => {
     height,
     shape,
     frameColor,
-    technology,
   } = props;
 
   const arr = [];
@@ -58,17 +57,6 @@ const SelectItem = (props) => {
       {
         value: "gold",
         name: "זהב",
-      },
-    ];
-  } else if (technology) {
-    selectData = [
-      {
-        value: "all",
-        name: "שליטה על עוצמת תאורה, שרת אדים, חיישן קירבה, תצוגת זמן וטמפרטורה והתקן בלוטוס",
-      },
-      {
-        value: "partial",
-        name: "שלושה סוגי תאורה",
       },
     ];
   }

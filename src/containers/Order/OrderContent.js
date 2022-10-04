@@ -25,7 +25,7 @@ const OrderContent = () => {
           height={window.innerHeight - 160}
         >
           <div style={{ flex: 1 }}>
-            <OrderForm onChange={onChange} />
+            <OrderForm onChange={onChange} values={values} />
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>

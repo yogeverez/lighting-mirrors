@@ -28,7 +28,7 @@ const MirrorWrapper = styled.div`
     background: url(${pattern}) no-repeat center;
     background-size: cover;
 
-    border: ${(props) => (props["border"] === true ? "3px solid" : "none")};
+    border: ${(props) => (props["border"] === true ? "6px solid" : "none")};
     border-color: ${(props) => props["borderColor"]};
     border-radius: ${(props) => props["borderRadius"]};
     // box-shadow: 0 0px 45px 5px #f5cc8a;

@@ -1,16 +1,20 @@
-import React from "react";
-import { Form, Row, Col } from "antd";
+import React, { useState } from "react";
+import { Form, Row, Col, Button } from "antd";
 import FloatingFormActions from "../../common/forms/FloatingFormActions";
 import PhoneNumberItem from "../../common/forms/PhoneNumberItem";
 import InputItem from "../../common/forms/InputItem";
 import SelectItem from "../../common/forms/SelectItem";
+import ArrayRadioButtonItem from "../../common/forms/ArrayRadioButtonItem";
+import MirrorStyleItem from "../../common/forms/MirrorStyleItem";
 import RadioButtonItem from "../../common/forms/RadioButtonItem";
 import ResponsiveItemsWrapper from "../../common/components/Layouts/ResponsiveItemsWrapper";
 import Spacer from "../../common/components/Layouts/Spacer";
+import Auth from "../../api/auth";
 
 const OrderForm = (props) => {
-  const { onChange } = props;
+  const { onChange, values } = props;
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
 
   const onValuesChange = (changedValues, allValues) => {
     onChange(allValues);
@@ -23,8 +27,11 @@ const OrderForm = (props) => {
 
   const onDecline = () => {};
 
-  const onSubmit = (r) => {
-    console.log(r);
+  const onSubmit = async (r) => {
+    setLoading(true);
+    const order = await Auth.addOrder(r);
+    setLoading(false);
+    console.log(order);
   };
 
   return (
@@ -123,8 +130,11 @@ const OrderForm = (props) => {
               />
             </div>
             <Spacer horizontal={true} />
+            <div style={{ flex: 1 }}></div>
+          </ResponsiveItemsWrapper>
+          <ResponsiveItemsWrapper>
             <div style={{ flex: 1 }}>
-              <SelectItem
+              <ArrayRadioButtonItem
                 name={"technology"}
                 required={true}
                 technology={true}
@@ -132,22 +142,40 @@ const OrderForm = (props) => {
               />
             </div>
           </ResponsiveItemsWrapper>
+          <ResponsiveItemsWrapper>
+            <div style={{ flex: 1 }}>
+              <MirrorStyleItem
+                name={"style"}
+                required={true}
+                label={"סגנון המראה"}
+                values={values}
+              />
+            </div>
+          </ResponsiveItemsWrapper>
         </Col>
       </Row>
-      <FloatingFormActions
-        resource={"employees"}
-        action={"editor"}
-        onCancel={onDecline}
-        formName={"order"}
-        onDecline={onDecline}
-        hideDelete={true}
-        hideDecline={true}
-        // saveLoading={saveLoading}
-        saveText={"הזמן"}
-        show={true}
-      />
+      <div style={{ display: "flex", alignItems: "center", padding: "0 20%" }}>
+        <Button type="primary" htmlType="submit" block loading={loading}>
+          הזמן
+        </Button>
+      </div>
     </Form>
   );
 };
 
 export default OrderForm;
+
+{
+  /* <FloatingFormActions
+resource={"employees"}
+action={"editor"}
+onCancel={onDecline}
+formName={"order"}
+onDecline={onDecline}
+hideDelete={true}
+hideDecline={true}
+// saveLoading={saveLoading}
+saveText={"הזמן"}
+show={true}
+/> */
+}

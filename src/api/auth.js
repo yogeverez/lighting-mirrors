@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth } from "firebase/auth";
+import { collection, addDoc, getFirestore } from "firebase/firestore";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD9IcDq5ly9gGMfV5pGUVmIhRgjWnz_Gx8",
@@ -14,6 +15,7 @@ export const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 const auth = initializeAuth(app, {
   // persistence: browserSessionPersistence,
@@ -27,7 +29,12 @@ class Auth {
     });
   }
 
-  async signInWithProvider(provider, providerTenant) {}
+  async addOrder(order) {
+    // Add a new document with a generated id.
+    const docRef = await addDoc(collection(db, "orders"), order);
+    console.log("Document written with ID: ", docRef.id);
+    return docRef;
+  }
 }
 
 export default new Auth();

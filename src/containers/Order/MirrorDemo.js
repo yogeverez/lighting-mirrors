@@ -55,21 +55,7 @@ const MirrorDemo = (props) => {
     } else {
       setBorderRadius(values.corners === "round" ? "10px" : "0px");
     }
-
-    //     var ret = "data-123".replace('data-','');
-
-    //     corners: "straight"
-    // frame: true
-    // frame-color: "black"
-    // height: "40CM"
-    // lighting: undefined
-    // name: "fsd"
-    // phone: undefined
-    // shape: "rectangle"
-    // technology: undefined
-    // width: "40CM"
   }, [values]);
-  console.log(mirrorWidth);
   return (
     <MirrorWrapper
       isBigScreen={isBigScreen}
@@ -86,7 +72,7 @@ const MirrorDemo = (props) => {
         <div className="mirror" />
         {mirrorWidth && mirrorHeight && technology && (
           <img
-            src={technology === "all" ? functions : simple}
+            src={technology[0] === "Three color lights" ? simple : functions}
             style={{
               position: "relative",
               width: "60px",
