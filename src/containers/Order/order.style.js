@@ -20,7 +20,7 @@ export const OrderContentWrapper = styled.div`
 
 export const Content = styled.div`
   // max-width: 1000px;
-  margin: 0 auto;
+  padding: 30px 0 0 0;
   text-align: center;
   // @media (max-width: 1024px) {
   //   max-width: 660px;
@@ -71,6 +71,9 @@ export const Content = styled.div`
   }
   .ant-radio-wrapper-checked .inner {
     background: #1890ff;
+  }
+  .steps-content {
+    padding: 20px 0 0 0;
   }
 `;
 

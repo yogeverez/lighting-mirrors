@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import pattern from "../../common/assets/image/mirrors/pattern.png";
+import pattern from "../../../common/assets/image/mirrors/pattern.png";
 
 const MirrorWrapper = styled.div`
   height: calc(100vh - 160px);

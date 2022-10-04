@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MirrorWrapper from "./Mirror.style";
 import { useMediaQuery } from "react-responsive";
-import functions from "../../common/assets/image/mirrors/functions.png";
-import simple from "../../common/assets/image/mirrors/simple.png";
-import Technology from "../Technology";
+import functions from "../../../common/assets/image/mirrors/functions.png";
+import simple from "../../../common/assets/image/mirrors/simple.png";
 
 const MirrorDemo = (props) => {
   const { values } = props;
@@ -22,6 +21,8 @@ const MirrorDemo = (props) => {
   console.log(values);
   useEffect(() => {
     if (isBigScreen) {
+      // setWidth(window.innerWidth - 40);
+
       setWidth(window.innerWidth / 2 - 40);
     } else {
       setWidth(window.innerWidth - 40);
