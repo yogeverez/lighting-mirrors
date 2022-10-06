@@ -59,27 +59,29 @@ const FormSteps = (props) => {
         ))}
       </div>
       <div className="steps-action">
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={() => next()}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
-            Done
-          </Button>
-        )}
         {current > 0 && (
           <Button
+            shape="round"
             style={{
               margin: "0 8px",
             }}
             onClick={() => prev()}
           >
-            Previous
+            הקודם
+          </Button>
+        )}
+        {current < steps.length - 1 && (
+          <Button shape="round" type="primary" onClick={() => next()}>
+            הבא
+          </Button>
+        )}
+        {current === steps.length - 1 && (
+          <Button
+            shape="round"
+            type="primary"
+            onClick={() => message.success("Processing complete!")}
+          >
+            סיים
           </Button>
         )}
       </div>

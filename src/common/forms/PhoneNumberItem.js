@@ -67,6 +67,7 @@ const PhoneInputComponent = ({ value, onChange, disabled, isMobile }) => {
       value={countryCode}
       onSelect={onSelect}
       disabled={disabled}
+      style={{ width: "80px" }}
     >
       {selectData.map((item) => (
         <Option
@@ -126,6 +127,7 @@ const PhoneNumberItem = (props) => {
     <Form.Item
       label={hideLabel ? null : label}
       name={name}
+      // style={{ width: "250px" }}
       rules={[
         {
           required: required,

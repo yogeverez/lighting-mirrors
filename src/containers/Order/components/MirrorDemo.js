@@ -3,6 +3,8 @@ import MirrorWrapper from "./Mirror.style";
 import { useMediaQuery } from "react-responsive";
 import functions from "../../../common/assets/image/mirrors/functions.png";
 import simple from "../../../common/assets/image/mirrors/simple.png";
+import Summary from "./Summary";
+import Pricing from "./Pricing";
 
 const MirrorDemo = (props) => {
   const { values } = props;
@@ -17,15 +19,15 @@ const MirrorDemo = (props) => {
   const [technology, setTechnology] = useState("straight");
   const [borderRadius, setBorderRadius] = useState("0px");
 
-  const isBigScreen = useMediaQuery({ query: "(min-width: 991px)" });
+  const isBigScreen = useMediaQuery({ query: "(min-width: 670px)" });
   console.log(values);
   useEffect(() => {
     if (isBigScreen) {
       // setWidth(window.innerWidth - 40);
 
-      setWidth(window.innerWidth / 2 - 40);
+      setWidth(650);
     } else {
-      setWidth(window.innerWidth - 40);
+      setWidth(window.innerWidth - 20);
     }
   }, [isBigScreen]);
 
@@ -69,20 +71,29 @@ const MirrorDemo = (props) => {
       shape={shape}
       borderRadius={borderRadius}
     >
-      <div className="inner">
-        <div className="mirror" />
-        {mirrorWidth && mirrorHeight && technology && (
-          <img
-            src={technology[0] === "Three color lights" ? simple : functions}
-            style={{
-              position: "relative",
-              width: "60px",
-              height: "30px",
-              bottom: "50px",
-            }}
-          />
-        )}
+      <div className="container">
+        <Summary values={values} />
+
+        <div className="outer">
+          <div className="inner">
+            <div className="mirror" />
+            {mirrorWidth && mirrorHeight && technology && (
+              <img
+                src={
+                  technology[0] === "Three color lights" ? simple : functions
+                }
+                style={{
+                  position: "relative",
+                  width: "30px",
+                  height: "15px",
+                  bottom: "25px",
+                }}
+              />
+            )}
+          </div>
+        </div>
       </div>
+      <Pricing />
     </MirrorWrapper>
   );
 };

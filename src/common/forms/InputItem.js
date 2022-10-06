@@ -47,6 +47,7 @@ const InputItem = (props) => {
       }
       onChange={onChange}
       style={style}
+      // style={{ ...style, width: "250px" }}
     >
       <Input
         disabled={disabled}

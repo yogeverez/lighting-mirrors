@@ -2,16 +2,35 @@ import styled from "styled-components";
 import pattern from "../../../common/assets/image/mirrors/pattern.png";
 
 const MirrorWrapper = styled.div`
-  height: calc(100vh - 160px);
-  width: ${(props) => (props["width"] ? `${props["width"]}px` : "100%")};
-  //   background-color: red;
-  display: flex;
-  justify-content: center;
-  padding-top: 20px;
+  .container {
+    // height: calc(100vh - 160px);
+    width: ${(props) => (props["width"] ? `${props["width"]}px` : "100%")};
+    //   background-color: red;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+  .details {
+    width: ${(props) => (props["width"] ? `${props["width"] / 2}px` : "50%")};
+    height: 100%;
+    .spec {
+      background: #f6f8fb;
+      padding: 10px;
+      border-radius: 20px;
+    }
+  }
+  .outer {
+    width: ${(props) => (props["width"] ? `${props["width"] / 2}px` : "50%")};
+    //   background-color: red;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
   .inner {
-    width: ${(props) => (props["width"] ? `${props["width"] - 40}px` : "100%")};
+    width: ${(props) =>
+      props["width"] ? `${props["width"] / 2 - 40}px` : "100%"};
     height: ${(props) =>
-      props["width"] ? `${props["width"] - 40}px` : "100%"};
+      props["width"] ? `${props["width"] / 2 - 40}px` : "100%"};
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -28,7 +47,7 @@ const MirrorWrapper = styled.div`
     background: url(${pattern}) no-repeat center;
     background-size: cover;
 
-    border: ${(props) => (props["border"] === true ? "6px solid" : "none")};
+    border: ${(props) => (props["border"] === true ? "3px solid" : "none")};
     border-color: ${(props) => props["borderColor"]};
     border-radius: ${(props) => props["borderRadius"]};
     // box-shadow: 0 0px 45px 5px #f5cc8a;
