@@ -20,7 +20,7 @@ export const OrderContentWrapper = styled.div`
 
 export const Content = styled.div`
   // max-width: 1000px;
-  padding: 30px 0 0 0;
+  padding: 10px 0 0 0;
   text-align: center;
   // @media (max-width: 1024px) {
   //   max-width: 660px;
@@ -73,7 +73,13 @@ export const Content = styled.div`
     background: #1890ff;
   }
   .steps-content {
-    padding: 20px 0 0 0;
+    padding: 10px;
+    border: 1px solid #d9d9d9;
+    margin: 10px 0;
+    border-radius: 10px;
+    max-height: calc(100vh - 245px);
+
+    overflow: auto;
   }
 `;
 

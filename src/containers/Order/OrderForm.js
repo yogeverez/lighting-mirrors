@@ -9,6 +9,8 @@ import MirrorStyleItem from "../../common/forms/MirrorStyleItem";
 import RadioButtonItem from "../../common/forms/RadioButtonItem";
 import ResponsiveItemsWrapper from "../../common/components/Layouts/ResponsiveItemsWrapper";
 import Spacer from "../../common/components/Layouts/Spacer";
+import Heading from "../../common/components/Heading";
+
 import Auth from "../../api/auth";
 import FormSteps from "./FormSteps";
 
@@ -46,6 +48,7 @@ const OrderForm = (props) => {
       form={form}
       //   style={{ height: "800px", overflow: "auto" }}
     >
+      <Heading content="יצירת מראה מותאמת אישית" as="h1" />
       <FormSteps values={values} />
     </Form>
   );

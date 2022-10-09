@@ -106,13 +106,6 @@ const Navbar = ({
               offset={-70}
             />
 
-            <Link to="#" className="navbar_button navbar_button_two">
-              <Button
-                {...button}
-                title="הזמן מראה בהתאמה אישית"
-                onClick={onShow}
-              />
-            </Link>
             <Drawer
               width="420px"
               placement="right"
@@ -129,6 +122,14 @@ const Navbar = ({
                 offset={-100}
               />
             </Drawer>
+
+            <Link to="#" className="navbar_button navbar_button_two">
+              <Button
+                {...button}
+                title="הזמן מראה בהתאמה אישית"
+                onClick={onShow}
+              />
+            </Link>
           </Box>
         </Box>
       </Container>

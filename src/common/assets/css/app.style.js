@@ -1,9 +1,9 @@
-import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { themeGet } from '@styled-system/theme-get';
-import bgPattern from '../image/pattern3.png';
-import pattern5 from '../image/pattern5.png';
-import pattern6 from '../image/pattern6.png';
-import pattern7 from '../image/pattern7.png';
+import styled, { createGlobalStyle, keyframes } from "styled-components";
+import { themeGet } from "@styled-system/theme-get";
+import bgPattern from "../image/pattern3.png";
+import pattern5 from "../image/pattern5.png";
+import pattern6 from "../image/pattern6.png";
+import pattern7 from "../image/pattern7.png";
 
 const Fade = keyframes`
   0% {
@@ -49,6 +49,53 @@ export const GlobalStyle = createGlobalStyle`
   section {
     position: relative;
   }
+     .mobile_menu {
+        padding: 40px;
+        margin-bottom: 40px;
+        flex-grow: 1;
+        @media (max-width: 767px) {
+          margin-bottom: 30px;
+        }
+        li{
+          margin-bottom: 35px;
+          @media (max-width: 767px) {
+            margin-bottom: 25px;
+          }
+          a{
+            font-size: 20px;
+            font-weight: 400;
+            color: #343d48;
+            position: relative;
+            transition: 0.15s ease-in-out;
+            @media (max-width: 767px) {
+              font-size: 18px;
+            }
+            &:hover {
+              color: ${themeGet("colors.primary")};
+            }
+            &:before{
+              content: '';
+              width: 7px;
+              height: 7px;
+              background: ${themeGet("colors.primary")};
+              border-radius: 50%;
+              position: absolute;
+              top: 50%;
+              left: -15px;
+              transform: translateY(-50%);
+              opacity: 0;
+            }
+          }
+          &.is-current {
+            a {
+              color: ${themeGet("colors.primary")};
+              &:before{
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
 
   .drawer-content-wrapper{
     @media (max-width: 767px) {
@@ -185,8 +232,8 @@ export const ContentWrapper = styled.div`
       flex: 1 1 100%;
 
       @media (max-width: 991px) {
-        flex: 0 0 auto;
-        margin-left: auto;
+        // flex: 0 0 auto;
+        // margin-left: auto;
       }
     }
     .main_menu {
@@ -207,18 +254,18 @@ export const ContentWrapper = styled.div`
         }
         &.is-current {
           a {
-            color: ${themeGet('colors.primary')};
+            color: ${themeGet("colors.primary")};
           }
         }
         a {
-          color: ${themeGet('colors.headingColor')};
+          color: ${themeGet("colors.headingColor")};
           font-size: 15px;
           line-height: 2.2;
           font-weight: 500;
           padding: 5px;
           transition: 0.15s ease-in-out;
           &:hover {
-            color: ${themeGet('colors.primary')};
+            color: ${themeGet("colors.primary")};
           }
         }
       }
@@ -237,7 +284,7 @@ export const ContentWrapper = styled.div`
 
       button {
         background-color: transparent;
-        color: ${themeGet('colors.headingColor')};
+        color: ${themeGet("colors.headingColor")};
         padding: 0;
       }
 
@@ -246,13 +293,13 @@ export const ContentWrapper = styled.div`
       }
     }
     .navbar_button_two {
-      margin-left: 25px;
+      // margin-left: 25px;
       button {
         border-radius: 8px;
       }
 
       @media (max-width: 990px) {
-        display: none;
+        // display: none;
       }
     }
     .reusecore-drawer__handler {
@@ -261,7 +308,7 @@ export const ContentWrapper = styled.div`
       }
       .hamburgMenu__bar {
         > span {
-          background-color: ${themeGet('colors.headingColor')};
+          background-color: ${themeGet("colors.headingColor")};
         }
       }
     }
@@ -269,11 +316,11 @@ export const ContentWrapper = styled.div`
 
   .sticky-nav-active {
     .web_app_creative_navbar {
-      background-color: ${themeGet('colors.white')};
+      background-color: ${themeGet("colors.white")};
       box-shadow: 0px 3px 8px 0px rgba(43, 83, 135, 0.08);
       padding: 15px 0;
       .main_menu li a {
-        color: ${themeGet('colors.headingColor')};
+        color: ${themeGet("colors.headingColor")};
       }
       .main_menu li:hover a,
       .main_menu li.is-current a {
@@ -282,12 +329,12 @@ export const ContentWrapper = styled.div`
       .reusecore-drawer__handler {
         .hamburgMenu__bar {
           > span {
-            background-color: ${themeGet('colors.headingColor')};
+            background-color: ${themeGet("colors.headingColor")};
           }
         }
       }
       .navbar_button_one button {
-        color: ${themeGet('colors.headingColor')};
+        color: ${themeGet("colors.headingColor")};
       }
       .navbar_button_two button {
       }
