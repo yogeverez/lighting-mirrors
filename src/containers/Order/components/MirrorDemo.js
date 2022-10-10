@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MirrorWrapper from "./Mirror.style";
+import { Row, Col } from "antd";
+
 import { useMediaQuery } from "react-responsive";
 import functions from "../../../common/assets/image/mirrors/functions.png";
 import simple from "../../../common/assets/image/mirrors/simple.png";

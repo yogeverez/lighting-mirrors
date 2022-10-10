@@ -2,16 +2,16 @@ import styled from "styled-components";
 import pattern from "../../../common/assets/image/mirrors/pattern.png";
 
 const MirrorWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   .container {
-    // height: calc(100vh - 160px);
-    width: ${(props) => (props["width"] ? `${props["width"]}px` : "100%")};
-    //   background-color: red;
+    width: 100%;
     display: flex;
     justify-content: center;
     padding-top: 20px;
   }
   .details {
-    width: ${(props) => (props["width"] ? `${props["width"] / 2}px` : "50%")};
+    width: 50%;
     height: 100%;
     .spec {
       background: #f6f8fb;
@@ -20,7 +20,7 @@ const MirrorWrapper = styled.div`
     }
   }
   .outer {
-    width: ${(props) => (props["width"] ? `${props["width"] / 2}px` : "50%")};
+    width: 50%;
     //   background-color: red;
     display: flex;
     justify-content: center;

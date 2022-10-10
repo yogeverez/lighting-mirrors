@@ -78,6 +78,9 @@ export const Content = styled.div`
     margin: 10px 0;
     border-radius: 10px;
     max-height: calc(100vh - 245px);
+    @media (max-width: 689px) {
+      max-height: calc(100vh - 385px);
+    }
 
     overflow: auto;
   }

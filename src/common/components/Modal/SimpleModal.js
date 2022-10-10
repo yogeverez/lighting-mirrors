@@ -13,10 +13,7 @@ const SimpleModal = (props) => {
   return (
     <Modal
       centered
-      width={isBigScreen ? "670px" : "vw"}
-      style={{
-        margin: "0 10px",
-      }}
+      width={"initial"}
       bodyStyle={{
         zIndex: 9999,
       }}
