@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "antd";
 import { useMediaQuery } from "react-responsive";
+import { flex } from "styled-system";
 
 const SimpleModal = (props) => {
   const { visible, onHide, children } = props;
@@ -12,17 +13,28 @@ const SimpleModal = (props) => {
 
   return (
     <Modal
-      centered
-      width={"initial"}
+      className="modalStyle"
+      width={"100vw"}
+      style={{
+        height: "100vh",
+        background: "#cee7ff",
+        margin: 0,
+        maxWidth: "100vw",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: 9999,
+      }}
       bodyStyle={{
         zIndex: 9999,
+        boxShadow: "none",
       }}
       open={visible}
       footer={null}
       destroyOnClose={true}
       onCancel={closeModal}
     >
-      <div>{children}</div>
+      <div className="modal-inner">{children}</div>
     </Modal>
   );
 };

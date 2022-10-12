@@ -33,10 +33,10 @@ const Specifications = (props) => {
 
         <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
-            <SelectItem
+            <RadioButtonItem
               name={"shape"}
-              required={true}
               shape={true}
+              required={true}
               label={"צורת המראה"}
             />
           </div>
@@ -62,10 +62,10 @@ const Specifications = (props) => {
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>
-            <SelectItem
+            <RadioButtonItem
               name={"frame-color"}
-              required={true}
               frameColor={true}
+              required={true}
               label={"צבע המסגרת"}
             />
           </div>

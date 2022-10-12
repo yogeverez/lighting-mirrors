@@ -14,6 +14,8 @@ const RadioButtonItem = (props) => {
     disabled,
     label,
     lighting,
+    shape,
+    frameColor,
   } = props;
   const [selectData, setSelectData] = useState([]);
   useEffect(() => {
@@ -60,6 +62,32 @@ const RadioButtonItem = (props) => {
         {
           id: "back",
           name: "אחורית",
+        },
+      ];
+    } else if (shape) {
+      list = [
+        {
+          id: "rectangle",
+          name: "מלבנית",
+        },
+        {
+          id: "round",
+          name: "עגולה",
+        },
+        {
+          id: "elipse",
+          name: "אליפסה",
+        },
+      ];
+    } else if (frameColor) {
+      list = [
+        {
+          id: "black",
+          name: "שחור",
+        },
+        {
+          id: "gold",
+          name: "זהב",
         },
       ];
     }

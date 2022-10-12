@@ -25,11 +25,9 @@ const MirrorDemo = (props) => {
   console.log(values);
   useEffect(() => {
     if (isBigScreen) {
-      // setWidth(window.innerWidth - 40);
-
-      setWidth(650);
+      setWidth(window.innerWidth / 2 - 40);
     } else {
-      setWidth(window.innerWidth - 20);
+      setWidth(window.innerWidth - 40);
     }
   }, [isBigScreen]);
 
@@ -74,8 +72,6 @@ const MirrorDemo = (props) => {
       borderRadius={borderRadius}
     >
       <div className="container">
-        <Summary values={values} />
-
         <div className="outer">
           <div className="inner">
             <div className="mirror" />
@@ -94,6 +90,7 @@ const MirrorDemo = (props) => {
             )}
           </div>
         </div>
+        <Summary values={values} />
       </div>
       <Pricing />
     </MirrorWrapper>

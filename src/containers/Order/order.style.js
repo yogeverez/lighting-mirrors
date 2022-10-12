@@ -70,11 +70,14 @@ export const Content = styled.div`
     padding: 4px;
   }
   .ant-radio-wrapper-checked .inner {
-    background: #1890ff;
+    // background: #1890ff;
   }
   .steps-content {
     padding: 10px;
-    border: 1px solid #d9d9d9;
+    // border: 1px solid #d9d9d9;
+    background: #ffffff;
+    // border: 1px solid BLACK;
+
     margin: 10px 0;
     border-radius: 10px;
     max-height: calc(100vh - 245px);
@@ -83,6 +86,44 @@ export const Content = styled.div`
     }
 
     overflow: auto;
+  }
+  .modal-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .ant-modal-content {
+    box-shadow: none;
+  }
+  .ant-radio-wrapper-checked {
+    span.ant-radio + * {
+      border-color: #1890ff;
+      border-width: 2px;
+    }
+  }
+  span.ant-radio + * {
+    padding-right: 8px;
+    padding-left: 8px;
+    border: 1px solid gray;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  .ant-radio {
+    display: none;
+  }
+  .ant-radio-group {
+    display: flex;
+  }
+  .ant-form-vertical .ant-form-item-row {
+    flex-direction: row;
+  }
+  .ant-form-item-control-input-content {
+    display: flex;
+  }
+  .ant-form-item-label label {
+    font-weight: bold;
   }
 `;
 

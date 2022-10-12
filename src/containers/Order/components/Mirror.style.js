@@ -9,28 +9,29 @@ const MirrorWrapper = styled.div`
     display: flex;
     justify-content: center;
     padding-top: 20px;
+    flex-direction: ${(props) => (props["isBigScreen"] ? `row` : "column")};
   }
   .details {
-    width: 50%;
+    flex: 1;
+    // width: 50%;
     height: 100%;
     .spec {
-      background: #f6f8fb;
+      // background: #f6f8fb;
       padding: 10px;
-      border-radius: 20px;
+      // border-radius: 20px;
     }
   }
   .outer {
-    width: 50%;
+    flex: 1;
+    // width: 50%;
     //   background-color: red;
     display: flex;
     justify-content: center;
     padding-top: 20px;
   }
   .inner {
-    width: ${(props) =>
-      props["width"] ? `${props["width"] / 2 - 40}px` : "100%"};
-    height: ${(props) =>
-      props["width"] ? `${props["width"] / 2 - 40}px` : "100%"};
+    // width: 100%;
+    // height: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -40,9 +41,13 @@ const MirrorWrapper = styled.div`
   }
   .mirror {
     width: ${(props) =>
-      props["mirrorWidth"] ? `${props["mirrorWidth"]}%` : "0%"};
+      props["mirrorWidth"]
+        ? `${(props["mirrorWidth"] * (props["width"] - 40)) / 100}px`
+        : "0%"};
     height: ${(props) =>
-      props["mirrorHeight"] ? `${props["mirrorHeight"]}%` : "0%"};
+      props["mirrorHeight"]
+        ? `${(props["mirrorHeight"] * (props["width"] - 40)) / 100}px`
+        : "0%"};
     // background-color: white;
     background: url(${pattern}) no-repeat center;
     background-size: cover;

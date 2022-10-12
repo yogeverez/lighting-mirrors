@@ -4,6 +4,7 @@ import PersonalDetails from "./components/PersonalDetails";
 import Specifications from "./components/Specifications";
 import Lighting from "./components/Lighting";
 import MirrorDemo from "./components/MirrorDemo";
+import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 const { Step } = Steps;
 
 const FormSteps = (props) => {
@@ -44,6 +45,32 @@ const FormSteps = (props) => {
     setCurrent(current - 1);
   };
 
+  const phoneNumber = values.phone && parsePhoneNumberFromString(values.phone);
+  console.log(phoneNumber);
+
+  let disabled = false;
+
+  switch (current) {
+    case 0:
+      disabled =
+        !values.name || !values.phone || !phoneNumber || !phoneNumber.isValid();
+      break;
+    case 1:
+      disabled =
+        !values.width ||
+        !values.height ||
+        !values.height ||
+        !values.shape ||
+        !values.corners ||
+        values.frame === undefined ||
+        !values["frame-color"] ||
+        !values.technology;
+      break;
+
+    default:
+      break;
+  }
+
   return (
     <>
       <Steps current={current}>
@@ -71,7 +98,12 @@ const FormSteps = (props) => {
           </Button>
         )}
         {current < steps.length - 1 && (
-          <Button shape="round" type="primary" onClick={() => next()}>
+          <Button
+            disabled={disabled}
+            shape="round"
+            type="primary"
+            onClick={() => next()}
+          >
             הבא
           </Button>
         )}

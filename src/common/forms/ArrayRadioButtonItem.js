@@ -53,7 +53,7 @@ const ArrayRadioButtonItem = (props) => {
         {selectData.map((item, i) => (
           <Radio key={i} value={item["value"]} disabled={disabled}>
             {item["name"].map((i) => (
-              <span style={{ display: "flex" }}>{i}</span>
+              <span style={{ display: "flex", textAlign: "start" }}>{i}</span>
             ))}
           </Radio>
         ))}
