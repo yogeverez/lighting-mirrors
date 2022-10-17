@@ -17,3 +17,6 @@ code {
   height: 100vh;
   overflow: auto;
 }
+.modalStyle {
+  -webkit-overflow-scrolling: touch;
+}
