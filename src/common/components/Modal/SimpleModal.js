@@ -16,8 +16,7 @@ const SimpleModal = (props) => {
       className="modalStyle"
       width={"100vw"}
       style={{
-        eight: "100vh",
-        overflow: "initial",
+        height: "100vh",
         background: "#f4f4f4",
         margin: 0,
         maxWidth: "100vw",
@@ -29,6 +28,7 @@ const SimpleModal = (props) => {
       bodyStyle={{
         zIndex: 9999,
         boxShadow: "none",
+        background: "#f4f4f4",
       }}
       open={visible}
       footer={null}
