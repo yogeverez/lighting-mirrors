@@ -16,7 +16,7 @@ const SimpleModal = (props) => {
       className="modalStyle"
       width={"100vw"}
       style={{
-        height: window.innerHeight,
+        height: "100vh",
         overflow: "hidden",
         background: "#f4f4f4",
         margin: 0,
