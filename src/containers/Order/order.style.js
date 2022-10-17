@@ -75,15 +75,16 @@ export const Content = styled.div`
   .steps-content {
     padding: 10px;
     // border: 1px solid #d9d9d9;
+    border: 1px solid #e4e4e4;
     background: #ffffff;
     // border: 1px solid BLACK;
 
     margin: 10px 0;
     border-radius: 10px;
-    max-height: calc(100vh - 245px);
-    @media (max-width: 689px) {
-      max-height: calc(100vh - 385px);
-    }
+    // max-height: calc(100vh - 245px);
+    // @media (max-width: 689px) {
+    //   max-height: calc(100vh - 385px);
+    // }
 
     overflow: auto;
   }

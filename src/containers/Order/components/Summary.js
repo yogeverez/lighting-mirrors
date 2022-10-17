@@ -1,110 +1,104 @@
-import React from "react";
-import { Space, Typography } from "antd";
-import CheckboxItem from "../../../common/forms/CheckboxItem";
-
-const { Text, Link } = Typography;
+import React, { useEffect, useState } from "react";
+import SummaryWrapper from "./Summary.style";
+import Signature from "../../../common/components/Signature";
+import { useMediaQuery } from "react-responsive";
+import functions from "../../../common/assets/image/mirrors/functions.png";
+import simple from "../../../common/assets/image/mirrors/simple.png";
+import Spec from "./Spec";
+import Pricing from "./Pricing";
 
 const Summary = (props) => {
-  const { values } = props;
-  console.log(values);
-  const width = "רוחב המראה";
-  const height = "אורך המראה";
-  const shape = "צורת המראה";
-  const corners = "פינות";
-  const frame = "מסגרת";
-  const frameColor = "צבע המסגרת";
-  const technology = "טכנולוגיה";
-  const arr = values && [
-    {
-      label: width,
-      value: values.width,
-    },
-    {
-      label: height,
-      value: values.height,
-    },
-    {
-      label: shape,
-      value:
-        values.shape === "rectangle"
-          ? "מלבנית"
-          : values.shape === "elipse"
-          ? "אליפסה"
-          : "עגולה",
-    },
-    {
-      label: corners,
-      value: values.corners === "round" ? "מעוגלות" : "ישרות",
-    },
-    {
-      label: frame,
-      value: values.frame ? "כן" : "לא",
-    },
-    {
-      label: frameColor,
-      value: values["frame-color"] === "black" ? "שחור" : "זהב",
-    },
-    {
-      label: technology,
-      value:
-        values &&
-        values.technology &&
-        values.technology[0] === "Three color lights"
-          ? "שלושה סוגי תאורה"
-          : "שליטה על עוצמת תאורה, הפשרת אדים, חיישן קירבה, תצוגת זמן וטמפרטורה, התקן בלוטוס",
-    },
-  ];
+  const { values, addSignature } = props;
+  const [width, setWidth] = useState(0);
+  const [mirrorHeight, setMirrorHeight] = useState(0);
+  const [mirrorWidth, setMirrorWidth] = useState(0);
 
-  //   corners: "round"
-  // frame: true
-  // frame-color: "black"
-  // height: "100CM"
-  // lighting: undefined
-  // name: undefined
-  // phone: undefined
-  // shape: "rectangle"
-  // style: undefined
-  // technology: (5) ['Brightness control', 'Intelligent defogging', 'Human-body induction', 'Time / Temperature display', 'Bluetooth']
-  // width: "44CM"
+  const [border, setBorder] = useState(0);
+  const [borderColor, setBorderColor] = useState("transparent");
+  const [lighting, setLighting] = useState("");
+  const [shape, setShape] = useState("");
+  const [technology, setTechnology] = useState("straight");
+  const [borderRadius, setBorderRadius] = useState("0px");
+
+  const isBigScreen = useMediaQuery({ query: "(min-width: 670px)" });
+  console.log(values);
+  useEffect(() => {
+    if (isBigScreen) {
+      setWidth(window.innerWidth / 2 - 40);
+    } else {
+      setWidth(window.innerWidth - 40);
+    }
+  }, [isBigScreen]);
+
+  useEffect(() => {
+    if (values.height) {
+      setMirrorHeight(parseInt(values.height.replace("CM", "")));
+    }
+    if (values.width) {
+      setMirrorWidth(parseInt(values.width.replace("CM", "")));
+    }
+    setBorder(values.frame);
+    setBorderColor(
+      values["frame-color"] === "black"
+        ? "#000000"
+        : values["frame-color"] === "gold"
+        ? "#f5cc8a"
+        : "transparent"
+    );
+    setTechnology(values.technology);
+    setLighting(values.lighting);
+    setShape(values.shape);
+    if (values.shape) {
+      if (values.shape === "rectangle") {
+        setBorderRadius(values.corners === "round" ? "10px" : "0px");
+      } else {
+        setBorderRadius(`${width / 2}px`);
+      }
+    } else {
+      setBorderRadius(values.corners === "round" ? "10px" : "0px");
+    }
+  }, [values]);
+
+  const onChangeSignature = (data) => {
+    addSignature(data);
+  };
 
   return (
-    <div className="details">
-      <div className="spec">
-        {values &&
-          arr.map((item) => (
-            <div style={{ display: "flex", textAlign: "right" }}>
-              <div
-                style={{ display: "flex", textAlign: "right", width: "100px" }}
-              >
-                <Text
-                  style={{
-                    textAlign: "right",
-                    width: "100px",
-                    margin: 0,
-                    lineHeight: 2.11,
-                    color: "#858b91",
-                  }}
-                >
-                  {`${item.label}:`}
-                </Text>
-              </div>
-
-              <Text
+    <SummaryWrapper
+      isBigScreen={isBigScreen}
+      width={width}
+      mirrorHeight={mirrorHeight}
+      mirrorWidth={mirrorWidth}
+      border={border}
+      borderColor={borderColor}
+      lighting={lighting}
+      shape={shape}
+      borderRadius={borderRadius}
+    >
+      <div className="container">
+        <div className="outer">
+          <div className="inner">
+            <div className="mirror" />
+            {mirrorWidth && mirrorHeight && technology && (
+              <img
+                src={
+                  technology[0] === "Three color lights" ? simple : functions
+                }
                 style={{
-                  display: "flex",
-                  textAlign: "right",
-                  padding: "0 2px",
-                  fontWeight: "bold",
-                  margin: 0,
-                  color: "#09131f",
+                  position: "relative",
+                  width: "30px",
+                  height: "15px",
+                  bottom: "25px",
                 }}
-              >
-                {`${item.value}`}
-              </Text>
-            </div>
-          ))}
+              />
+            )}
+          </div>
+        </div>
+        <Spec values={values} />
       </div>
-    </div>
+      <Pricing />
+      <Signature onChangeSignature={onChangeSignature} />
+    </SummaryWrapper>
   );
 };
 

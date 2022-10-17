@@ -23,16 +23,18 @@ const Lighting = (props) => {
           <div style={{ flex: 1 }}></div>
         </ResponsiveItemsWrapper>
 
-        <ResponsiveItemsWrapper>
-          <div style={{ flex: 1 }}>
-            <MirrorStyleItem
-              name={"style"}
-              required={true}
-              label={"סגנון המראה"}
-              values={values}
-            />
-          </div>
-        </ResponsiveItemsWrapper>
+        {values.lighting === "front" && (
+          <ResponsiveItemsWrapper>
+            <div style={{ flex: 1 }}>
+              <MirrorStyleItem
+                name={"style"}
+                required={true}
+                label={"סגנון המראה"}
+                values={values}
+              />
+            </div>
+          </ResponsiveItemsWrapper>
+        )}
       </Col>
     </Row>
   );

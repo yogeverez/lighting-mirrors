@@ -9930,6 +9930,7 @@ __metadata:
     react-router-dom: ^6.4.1
     react-scripts: 5.0.1
     react-scrollspy: ^3.4.3
+    react-sketch-canvas: ^6.2.0
     react-slick: ^0.29.0
     react-stickynode: ^4.1.0
     react-tabs: ^5.1.0
@@ -12553,6 +12554,15 @@ __metadata:
     react: ">=0.14.0"
     react-dom: ">=0.14.0"
   checksum: 467c1379dee26250ee1090abd32d297da42b34a007e76a39929b6f390b19a85d353a017a97b4f069df8f856205be6feeaba631ee321063ffce2150b67a5db42b
+  languageName: node
+  linkType: hard
+
+"react-sketch-canvas@npm:^6.2.0":
+  version: 6.2.0
+  resolution: "react-sketch-canvas@npm:6.2.0"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 7c7fb78079c90a4d70872bdbb1006193713acb6d38b91f9304fa41660c90266d0676c3bc857bfe93113ab812b60bbe5eeb37712e1582ee0e37894917374b94ce
   languageName: node
   linkType: hard
 

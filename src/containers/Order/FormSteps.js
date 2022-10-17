@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import PersonalDetails from "./components/PersonalDetails";
 import Specifications from "./components/Specifications";
 import Lighting from "./components/Lighting";
-import MirrorDemo from "./components/MirrorDemo";
+import Summary from "./components/Summary";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
+import Heading from "../../common/components/Heading";
 const { Step } = Steps;
 
 const FormSteps = (props) => {
   const [current, setCurrent] = useState(0);
-  const { values } = props;
+  const { values, addSignature, signature } = props;
 
   const steps = [
     {
@@ -33,7 +34,7 @@ const FormSteps = (props) => {
       index: 3,
 
       title: "סיכום",
-      content: <MirrorDemo values={values} />,
+      content: <Summary values={values} addSignature={addSignature} />,
     },
   ];
 
@@ -46,8 +47,6 @@ const FormSteps = (props) => {
   };
 
   const phoneNumber = values.phone && parsePhoneNumberFromString(values.phone);
-  console.log(phoneNumber);
-
   let disabled = false;
 
   switch (current) {
@@ -66,6 +65,14 @@ const FormSteps = (props) => {
         !values["frame-color"] ||
         !values.technology;
       break;
+    case 2:
+      disabled =
+        !values.lighting || (values.lighting === "front" && !values.style);
+      break;
+
+    case 3:
+      disabled = !values.terms || !signature;
+      break;
 
     default:
       break;
@@ -73,11 +80,22 @@ const FormSteps = (props) => {
 
   return (
     <>
-      <Steps current={current}>
-        {steps.map((item) => (
-          <Step key={item.title} title={item.title} />
-        ))}
-      </Steps>
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 9999,
+          background: " #f4f4f4",
+        }}
+      >
+        <Heading content="יצירת מראה מותאמת אישית" as="h1" />
+        <Steps current={current}>
+          {steps.map((item) => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+      </div>
+
       <div className="steps-content">
         {steps.map((item) => (
           <div style={{ display: current === item.index ? "initial" : "none" }}>
@@ -112,8 +130,9 @@ const FormSteps = (props) => {
             shape="round"
             type="primary"
             onClick={() => message.success("Processing complete!")}
+            disabled={disabled}
           >
-            סיים
+            מעבר לדף התשלום
           </Button>
         )}
       </div>
@@ -122,33 +141,3 @@ const FormSteps = (props) => {
 };
 
 export default FormSteps;
-
-// import { Divider, Steps } from "antd";
-// import React, { useState } from "react";
-// import PersonalDetails from "./components/PersonalDetails";
-// const { Step } = Steps;
-
-// const FormSteps = () => {
-//   const [current, setCurrent] = useState(0);
-
-//   const onChange = (value) => {
-//     console.log("onChange:", current);
-//     setCurrent(value);
-//   };
-
-//   return (
-//     <Steps current={current} onChange={onChange} direction="vertical">
-//       <Step title="פרטים אישיים" description="This is a description." />
-//       {current === 0 && (
-//         <div style={{ padding: "10px 0" }}>
-//           <PersonalDetails />
-//         </div>
-//       )}
-
-//       <Step title="Step 2" description="This is a description." />
-//       <Step title="Step 3" description="This is a description." />
-//     </Steps>
-//   );
-// };
-
-// export default FormSteps;

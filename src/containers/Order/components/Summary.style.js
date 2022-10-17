@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import pattern from "../../../common/assets/image/mirrors/pattern.png";
 
-const MirrorWrapper = styled.div`
+const SummaryWrapper = styled.div`
   display: flex;
   flex-direction: column;
   .container {
@@ -59,4 +59,4 @@ const MirrorWrapper = styled.div`
   }
 `;
 
-export default MirrorWrapper;
+export default SummaryWrapper;
