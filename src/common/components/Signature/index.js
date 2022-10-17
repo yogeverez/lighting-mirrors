@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import { ReactSketchCanvas } from "react-sketch-canvas";
-
+const { Text } = Typography;
 const Signature = (props) => {
   const { onChangeSignature } = props;
 
@@ -18,6 +18,14 @@ const Signature = (props) => {
   const canvasRef = useRef();
   return (
     <div>
+      <Text
+        style={{
+          textAlign: "right",
+          display: "flex",
+        }}
+      >
+        חתום/י לאישור פרטי המראה
+      </Text>
       <ReactSketchCanvas
         style={{
           border: "1px solid black",

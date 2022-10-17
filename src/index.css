@@ -13,5 +13,5 @@ code {
 }
 .modalStyle .ant-modal-content {
   box-shadow: none;
-  background-color: transparent;
+  background: #f4f4f4;
 }

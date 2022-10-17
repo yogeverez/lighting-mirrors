@@ -96,8 +96,8 @@ const Summary = (props) => {
         </div>
         <Spec values={values} />
       </div>
-      <Pricing />
       <Signature onChangeSignature={onChangeSignature} />
+      <Pricing />
     </SummaryWrapper>
   );
 };
