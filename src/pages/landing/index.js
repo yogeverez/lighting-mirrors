@@ -27,13 +27,11 @@ const Landing = () => {
     setVisible(false);
   };
 
-  console.log(visible);
   return (
     <div>
       <Fragment style={{ zIndex: 100 }}>
         <ResetCSS />
         <GlobalStyle />
-
         <ContentWrapper>
           <Sticky top={0} innerZ={999} activeClass="sticky-nav-active">
             <DrawerProvider>
