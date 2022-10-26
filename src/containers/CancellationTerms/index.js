@@ -1,22 +1,21 @@
 import React from "react";
 import Container from "../../common/components/UI/Container";
 import Sticky from "react-stickynode";
-
 import { Header, Inner } from "./index.style";
 import { Breadcrumb } from "antd";
 import Content from "./Content";
 
-const Privacy = () => {
+const CancellationTerms = () => {
   return (
     <Inner>
       <Sticky top={0} innerZ={999} activeClass="sticky-nav-active">
         <Header>
           <Container width="1400px">
             <div className="inner">
-              <h1>מדיניות פרטיות</h1>
+              <h1>תקנון האתר</h1>
               <Breadcrumb separator=">">
                 <Breadcrumb.Item href="/">בית</Breadcrumb.Item>
-                <Breadcrumb.Item>מדיניות פרטיות</Breadcrumb.Item>
+                <Breadcrumb.Item>מדיניות ביטולים והחזרות</Breadcrumb.Item>
               </Breadcrumb>
             </div>
           </Container>
@@ -30,4 +29,4 @@ const Privacy = () => {
   );
 };
 
-export default Privacy;
+export default CancellationTerms;

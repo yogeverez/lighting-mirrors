@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./pages/landing";
 import Terms from "./pages/terms";
 import Privacy from "./pages/privacy";
+import Cancellation from "./pages/cancellation";
 
 const AppRoutes = ({ location }) => {
   return (
@@ -11,6 +12,7 @@ const AppRoutes = ({ location }) => {
         <Route path={"/"} element={<Landing />} />
         <Route path={"/terms"} element={<Terms />} />
         <Route path={"/privacy"} element={<Privacy />} />
+        <Route path={"/cancellation"} element={<Cancellation />} />
       </Routes>
     </Router>
   );

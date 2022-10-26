@@ -44,7 +44,7 @@ const Landing = () => {
           <Technology />
           <Lightning />
           <Faq />
-          <Footer />
+          <Footer main={true} />
         </ContentWrapper>
         <Order onHide={onHide} visible={visible} />
       </Fragment>

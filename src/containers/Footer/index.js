@@ -12,21 +12,19 @@ import Link from "../../common/components/Link";
 import {
   Section,
   Grid,
-  AboutUs,
   FooterWidget,
   ContactInfo,
   InfoItem,
   FooterBottom,
-  FooterNav,
-  SocialLinks,
 } from "./footer.style";
 
-const Footer = () => {
+const Footer = (props) => {
+  const { main } = props;
   const footerTop = {
     widgets: [
       {
         id: 2,
-        title: "מדיניות",
+        title: "מדיניות האתר",
         list: [
           {
             id: 1,
@@ -40,8 +38,8 @@ const Footer = () => {
           },
           {
             id: 3,
-            title: "מדיניות החזרת מוצרים וביטולים",
-            link: "#",
+            title: "מדיניות ביטולים והחזרות",
+            link: "/cancellation",
           },
         ],
       },
@@ -60,7 +58,7 @@ const Footer = () => {
   };
 
   return (
-    <Section>
+    <Section style={{ background: main ? "#ffffff" : "#f4f4f4" }}>
       <Container width="1400px">
         <Grid>
           {footerTop.widgets.map((item) => (
