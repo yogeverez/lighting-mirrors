@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from "react";
-import { ThemeProvider } from "styled-components";
 import Sticky from "react-stickynode";
 import { DrawerProvider } from "../../common/contexts/DrawerContext";
 import { ResetCSS } from "../../common/assets/css/style";
@@ -12,7 +11,8 @@ import Faq from "../../containers/Faq";
 import Technology from "../../containers/Technology";
 import Footer from "../../containers/Footer";
 import Order from "../../containers/Order";
-import { theme } from "../../common/theme";
+import Payments from "../../api/payments";
+import { Button } from "antd";
 
 import { GlobalStyle, ContentWrapper } from "../../common/assets/css/app.style";
 
@@ -27,6 +27,10 @@ const Landing = () => {
     setVisible(false);
   };
 
+  const openPayments = async () => {
+    Payments.launchPaymentForm();
+  };
+
   return (
     <div>
       <Fragment style={{ zIndex: 100 }}>
@@ -39,6 +43,8 @@ const Landing = () => {
             </DrawerProvider>
           </Sticky>
           <Banner />
+          <Button onClick={() => openPayments()}>פתח תשלום</Button>
+
           <HowItWorks />
           <Shape />
           <Technology />
