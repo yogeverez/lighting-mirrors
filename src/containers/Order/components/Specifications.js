@@ -70,16 +70,6 @@ const Specifications = (props) => {
             />
           </div>
         </ResponsiveItemsWrapper>
-        <ResponsiveItemsWrapper>
-          <div style={{ flex: 1 }}>
-            <ArrayRadioButtonItem
-              name={"technology"}
-              required={true}
-              technology={true}
-              label={"טכנולוגיה"}
-            />
-          </div>
-        </ResponsiveItemsWrapper>
       </Col>
     </Row>
   );

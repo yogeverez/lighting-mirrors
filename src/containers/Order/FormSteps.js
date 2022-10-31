@@ -2,10 +2,12 @@ import { Button, message, Steps } from "antd";
 import React, { useState } from "react";
 import PersonalDetails from "./components/PersonalDetails";
 import Specifications from "./components/Specifications";
+import Technology from "./components/Technology";
 import Lighting from "./components/Lighting";
 import Summary from "./components/Summary";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import Heading from "../../common/components/Heading";
+
 const { Step } = Steps;
 
 const FormSteps = (props) => {
@@ -15,26 +17,32 @@ const FormSteps = (props) => {
   const steps = [
     {
       index: 0,
-      title: "פרטים אישיים",
-      content: <PersonalDetails />,
+
+      title: "גודל וצורה",
+      content: <Specifications />,
     },
     {
       index: 1,
 
-      title: "נתוני המראה",
-      content: <Specifications />,
-    },
-    {
-      index: 2,
-
       title: "תאורה",
       content: <Lighting values={values} />,
     },
+
+    {
+      index: 2,
+
+      title: "טכנולוגיה",
+      content: <Technology values={values} />,
+    },
     {
       index: 3,
-
       title: "סיכום",
       content: <Summary values={values} addSignature={addSignature} />,
+    },
+    {
+      index: 4,
+      title: "פרטי משלוח",
+      content: <PersonalDetails />,
     },
   ];
 
@@ -52,26 +60,35 @@ const FormSteps = (props) => {
   switch (current) {
     case 0:
       disabled =
-        !values.name || !values.phone || !phoneNumber || !phoneNumber.isValid();
-      break;
-    case 1:
-      disabled =
         !values.width ||
         !values.height ||
         !values.height ||
         !values.shape ||
         !values.corners ||
         values.frame === undefined ||
-        !values["frame-color"] ||
-        !values.technology;
+        !values["frame-color"];
       break;
-    case 2:
+    case 1:
       disabled =
         !values.lighting || (values.lighting === "front" && !values.style);
+      break;
+    case 2:
+      disabled = !values.technology;
       break;
 
     case 3:
       disabled = !values.terms || !signature;
+      break;
+    case 4:
+      disabled =
+        !values.first_name ||
+        !values.surename ||
+        !values.city ||
+        !values.street ||
+        !values.house_number ||
+        !values.phone ||
+        !phoneNumber ||
+        !phoneNumber.isValid();
       break;
 
     default:

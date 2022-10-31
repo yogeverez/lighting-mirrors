@@ -9925,6 +9925,7 @@ __metadata:
     react-aria-menubutton: ^7.0.3
     react-dom: ^18.2.0
     react-icons-kit: ^2.0.0
+    react-iframe: ^1.8.5
     react-responsive: ^9.0.0
     react-reveal: ^1.2.2
     react-router-dom: ^6.4.1
@@ -12396,6 +12397,17 @@ __metadata:
   peerDependencies:
     react: ">=15"
   checksum: 2a0c3231a46630d4052240b925294c8610bee1fc543c24f963b86628065c5fa97bf8b641bcd884df247e0e5193b25ae4a6c970defe127866e10058541d5c4ba1
+  languageName: node
+  linkType: hard
+
+"react-iframe@npm:^1.8.5":
+  version: 1.8.5
+  resolution: "react-iframe@npm:1.8.5"
+  dependencies:
+    object-assign: ^4.1.1
+  peerDependencies:
+    react: ">=16.x.x"
+  checksum: b2bb08039329035d44d6d85613337e200b7fe6d854dd45a54c34fc53ff4118874f23e17c7dbbb4825cd3d4b874ae4436edcabc819308e1aea4fdc3730ea50df0
   languageName: node
   linkType: hard
 

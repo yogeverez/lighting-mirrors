@@ -73,7 +73,9 @@ export const Content = styled.div`
     // background: #1890ff;
   }
   .steps-content {
-    padding: 10px;
+    height: ${(props) => props["contentHeight"]};
+    padding: ${(props) => (props["isBigScreen"] ? "20px" : "10px")};
+
     // border: 1px solid #d9d9d9;
     border: 1px solid #e4e4e4;
     background: #ffffff;

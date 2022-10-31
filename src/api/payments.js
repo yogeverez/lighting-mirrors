@@ -1,15 +1,15 @@
 class Payments {
   prox1 = "https://cors-anywhere.herokuapp.com/";
   prox2 = "https://thingproxy.freeboard.io/fetch/";
-  development = false;
+  development = true;
   async getGreenInvoiceToken() {
     const development = false;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = development
+    var raw = this.development
       ? JSON.stringify({
-          id: "c9785d21-d438-4518-a6d7-885d563c3433",
-          secret: "kMPNbbr-mKmSatqscxtcKA",
+          id: "2d4207f7-5e34-45b1-8798-a5ff69183e2f",
+          secret: "joYjc8r4Fji1WLEJv3LuVA",
         })
       : JSON.stringify({
           id: "454f75ae-0687-4a47-95b3-8982c41a7f44",
@@ -35,18 +35,17 @@ class Payments {
   }
 
   async launchPaymentForm() {
-    // const res = await this.getGreenInvoiceToken();
-    // const obj = JSON.parse(res);
-    // console.log(obj.token);
-    const tok =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.VUZndHRzQzN6Ym4vVG1YL2JFWEVjUkFDMXpyMkx3U3VNN1o5Qm9EV0tMZUxWc3g2MHFTQVlEUEM4RUJLUjV0Nlk4ZDkrZW14ZVN3Ymp0QW8xbGMrOHNleUZjVWZibnk5aU1pQnNMMkRCcHR6RnZRZlpFZytWTWd2RFEyL3hobEhuUDh2VC9FYXZvWWVvWmdYUVpPVmZtbEFOeHM0eGYxbitiSjdUdzl0SHgySThjQmMwZVRTV2wwbDR1ZXRud0hKQ1MyRitEMnJoaTBxNnN0bXVpdUZMOUVzWlhwMHJuYUNEc21GRnNac25JWjRJYkt5ZitKZGxPRlpOM3dIUEZFTll6OU9kSHdQTUZiM1A2dUJtcDNwNm5RNGQrRXRVSXkxcTZOM1Rtekk4MUkwdWcrcndMZnljNGt3dUtZVlUzSnRjNnV2Mm9neTlFbjhZM3pFaS83UGR3PT0.4FlbFSYqq1O-UwaRapKokJJ_3JTrPekrN_9hHVGqxSA";
+    const res = await this.getGreenInvoiceToken();
+    const obj = JSON.parse(res);
+    console.log(obj.token);
+
     var url = this.development
       ? "https://sandbox.d.greeninvoice.co.il/api/v1/payments/form"
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer '${tok}'`);
+    myHeaders.append("Authorization", `Bearer '${obj.token}'`);
     // "X-Authorization":Bearer Token '.....' // Here you can add your token
     myHeaders.append("Access-Control-Allow-Headers", "*");
     myHeaders.append("Access-Control-Request-Method", "POST");
@@ -60,12 +59,12 @@ class Payments {
       vatType: 0,
       amount: 20,
       maxPayments: 1,
-      //   pluginId: "7944827a-c664-11e4-8231-080027271115",
+      pluginId: "1a30a11e-ed83-4131-bc89-a7b82b1c826b",
       client: {
         // id: "7944827a-c664-11e4-8231-080027271114",
         name: "name",
         emails: ["email1@example.com", "email2@example.com"],
-        taxId: "0123456789",
+        taxId: "511294662",
         address: "1 Luria st",
         city: "Tel Aviv",
         zip: "1234567",
@@ -78,7 +77,7 @@ class Payments {
       income: [
         {
           //   catalogNum: "MXDFSDD",
-          //   description: "Item description",
+          description: "Item description",
           quantity: 1,
           price: 20,
           currency: "ILS",
@@ -94,15 +93,19 @@ class Payments {
 
     var requestOptions = {
       method: "POST",
+      //   mode: "no-cors",
       headers: myHeaders,
       body: raw,
       redirect: "follow",
     };
 
-    fetch(this.prox2 + url, requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    try {
+      var response = await fetch(this.prox2 + url, requestOptions);
+      const result = await response.text();
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 

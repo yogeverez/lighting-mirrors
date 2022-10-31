@@ -15,9 +15,11 @@ import Payments from "../../api/payments";
 import { Button } from "antd";
 
 import { GlobalStyle, ContentWrapper } from "../../common/assets/css/app.style";
+import Iframe from "react-iframe";
 
 const Landing = () => {
   const [visible, setVisible] = useState(false);
+  const [paymentUrl, setPaymentUrl] = useState(null);
 
   const onShow = () => {
     setVisible(true);
@@ -28,12 +30,33 @@ const Landing = () => {
   };
 
   const openPayments = async () => {
-    Payments.launchPaymentForm();
+    const res = await Payments.launchPaymentForm();
+    const obj = JSON.parse(res);
+    setPaymentUrl(obj.url);
   };
 
   return (
     <div>
       <Fragment style={{ zIndex: 100 }}>
+        {paymentUrl && (
+          <Iframe
+            url={paymentUrl}
+            // width="640px"
+            // height="320px"
+            styles={{
+              top: "40px",
+              left: "auto",
+              right: "auto",
+              background: "#ffffff",
+              zIndex: 99999,
+            }}
+            className=""
+            display="block"
+            top
+            position="absolute"
+          />
+        )}
+
         <ResetCSS />
         <GlobalStyle />
         <ContentWrapper>
