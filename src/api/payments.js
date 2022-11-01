@@ -34,7 +34,16 @@ class Payments {
     }
   }
 
-  async launchPaymentForm() {
+  async launchPaymentForm(values) {
+    console.log(values);
+    const frame = !values.frame ? "no frame" : `${values["frame-color"]} frame`;
+
+    const itemDescription = `${values.height} mirror ${values.height}X${values.width} ${frame}`;
+    const name =
+      values.business_name && values.business_name !== ""
+        ? values.business_name
+        : `${values.first_name} ${values.surename}`;
+
     const res = await this.getGreenInvoiceToken();
     const obj = JSON.parse(res);
     console.log(obj.token);
@@ -51,8 +60,8 @@ class Payments {
     myHeaders.append("Access-Control-Request-Method", "POST");
     myHeaders.append("Origin", "http://localhost:3000");
 
-    var raw = JSON.stringify({
-      description: "תיאור מסמך",
+    const orderDetails = {
+      description: "טופז תשלום",
       type: 320,
       lang: "he",
       currency: "ILS",
@@ -62,22 +71,22 @@ class Payments {
       pluginId: "1a30a11e-ed83-4131-bc89-a7b82b1c826b",
       client: {
         // id: "7944827a-c664-11e4-8231-080027271114",
-        name: "name",
-        emails: ["email1@example.com", "email2@example.com"],
-        taxId: "511294662",
-        address: "1 Luria st",
-        city: "Tel Aviv",
-        zip: "1234567",
+        name: name,
+        emails: [values.email],
+        taxId: values.taxId,
+        address: `${values.street} ${values.house_number}`,
+        city: values.city,
+        zip: values.zip,
         country: "IL",
-        phone: "+972-54-1234567",
-        fax: "+972-54-1234567",
-        mobile: "+972-54-1234567",
+        phone: values.phone,
+        // fax: "+972-54-1234567",
+        // mobile: "+972-54-1234567",
         add: true,
       },
       income: [
         {
           //   catalogNum: "MXDFSDD",
-          description: "Item description",
+          description: itemDescription,
           quantity: 1,
           price: 20,
           currency: "ILS",
@@ -89,7 +98,10 @@ class Payments {
       //   failureUrl: "http://localhost:3000/",
       //   notifyUrl: "http://localhost:3000",
       custom: "some custom data comes here",
-    });
+    };
+
+    var raw = JSON.stringify(orderDetails);
+    console.log(orderDetails);
 
     var requestOptions = {
       method: "POST",

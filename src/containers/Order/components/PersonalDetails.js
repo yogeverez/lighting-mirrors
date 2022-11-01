@@ -28,8 +28,9 @@ const PersonalDetails = (props) => {
 
           <div style={{ flex: 1 }}>
             <InputItem
-              name={"business_id"}
+              name={"taxId"}
               label={"ח״פ/ע״מ/ת״ז (לטובת החשבונית)"}
+              id={true}
             />
           </div>
         </ResponsiveItemsWrapper>
@@ -69,7 +70,7 @@ const PersonalDetails = (props) => {
           <Spacer horizontal={true} />
 
           <div style={{ flex: 1 }}>
-            <InputItem name={"delivery_notes"} label={"הערות למשלוח"} />
+            <InputItem name={"zip"} label={"מיקוד"} />
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>
@@ -81,6 +82,22 @@ const PersonalDetails = (props) => {
           </div>
           <Spacer horizontal={true} />
 
+          <div style={{ flex: 1 }}>
+            <InputItem
+              name={"email"}
+              label={"אימייל"}
+              required={true}
+              email={true}
+            />
+          </div>
+        </ResponsiveItemsWrapper>
+        <ResponsiveItemsWrapper>
+          <div style={{ flex: 1 }}>
+            <InputItem name={"delivery_notes"} label={"הערות למשלוח"} />
+          </div>
+          <Spacer horizontal={true} />
+          <div style={{ flex: 1 }}></div>
+          <Spacer horizontal={true} />
           <div style={{ flex: 1 }}></div>
         </ResponsiveItemsWrapper>
       </Col>

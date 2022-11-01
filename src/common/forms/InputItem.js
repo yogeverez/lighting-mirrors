@@ -6,6 +6,7 @@ const InputItem = (props) => {
   const {
     name,
     required,
+    id,
     number,
     email,
     disabled,
@@ -30,6 +31,9 @@ const InputItem = (props) => {
   const arr = [];
   if (required) {
     arr.push("required");
+  }
+  if (id) {
+    arr.push("id");
   }
   if (email) {
     arr.push("email");

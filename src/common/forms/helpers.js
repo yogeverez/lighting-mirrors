@@ -15,9 +15,45 @@ const getFormItemVaidation = (label, arr) => {
     message: emailMessage,
   };
 
+  const idMessage = "יש להכניס מספר ת.ז./ח.פ. תקני";
+  const hasWhiteSpace = (s) => s.indexOf(" ") >= 0;
+
+  const id = ({ getFieldValue }) => ({
+    validator(rule, value) {
+      if (!value) {
+        return Promise.resolve();
+      }
+      let strId = String(value).trim();
+      if (
+        hasWhiteSpace(String(value)) ||
+        strId.length > 9 ||
+        (strId.length < 8 && strId.length > 0)
+      ) {
+        return Promise.reject(idMessage);
+      }
+      if (strId.length < 9) {
+        while (strId.length < 9) strId = "0" + strId;
+      }
+      let counter = 0,
+        rawVal,
+        actualVal;
+      for (let i = 0; i < strId.length; i++) {
+        rawVal = Number(strId[i]) * ((i % 2) + 1);
+        actualVal = rawVal > 9 ? rawVal - 9 : rawVal;
+        counter += actualVal;
+      }
+      if (counter % 10 === 0) {
+        return Promise.resolve();
+      } else {
+        return Promise.reject(idMessage);
+      }
+    },
+  });
+
   const definedrules = {
     required: required,
     email: email,
+    id: id,
   };
   let rules = [];
 

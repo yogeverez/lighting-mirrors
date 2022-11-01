@@ -38,25 +38,6 @@ const Landing = () => {
   return (
     <div>
       <Fragment style={{ zIndex: 100 }}>
-        {paymentUrl && (
-          <Iframe
-            url={paymentUrl}
-            // width="640px"
-            // height="320px"
-            styles={{
-              top: "40px",
-              left: "auto",
-              right: "auto",
-              background: "#ffffff",
-              zIndex: 99999,
-            }}
-            className=""
-            display="block"
-            top
-            position="absolute"
-          />
-        )}
-
         <ResetCSS />
         <GlobalStyle />
         <ContentWrapper>

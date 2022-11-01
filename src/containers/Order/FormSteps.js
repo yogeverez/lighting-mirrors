@@ -4,6 +4,7 @@ import PersonalDetails from "./components/PersonalDetails";
 import Specifications from "./components/Specifications";
 import Technology from "./components/Technology";
 import Lighting from "./components/Lighting";
+import Payment from "./components/Payment";
 import Summary from "./components/Summary";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import Heading from "../../common/components/Heading";
@@ -18,31 +19,37 @@ const FormSteps = (props) => {
     {
       index: 0,
 
-      title: "גודל וצורה",
-      content: <Specifications />,
+      title: "גודל, צורה, תאורה וטכנולוגיה",
+      content: <Specifications values={values} />,
     },
+    // {
+    //   index: 1,
+
+    //   title: "תאורה",
+    //   content: <Lighting values={values} />,
+    // },
+
+    // {
+    //   index: 2,
+
+    //   title: "טכנולוגיה",
+    //   content: <Technology values={values} />,
+    // },
     {
       index: 1,
-
-      title: "תאורה",
-      content: <Lighting values={values} />,
-    },
-
-    {
-      index: 2,
-
-      title: "טכנולוגיה",
-      content: <Technology values={values} />,
-    },
-    {
-      index: 3,
       title: "סיכום",
       content: <Summary values={values} addSignature={addSignature} />,
     },
     {
-      index: 4,
+      index: 2,
       title: "פרטי משלוח",
       content: <PersonalDetails />,
+    },
+
+    {
+      index: 3,
+      title: "תשלום",
+      content: <Payment />,
     },
   ];
 
@@ -66,20 +73,23 @@ const FormSteps = (props) => {
         !values.shape ||
         !values.corners ||
         values.frame === undefined ||
-        !values["frame-color"];
+        !values["frame-color"] ||
+        !values.lighting ||
+        (values.lighting === "front" && !values.style) ||
+        !values.technology;
       break;
-    case 1:
-      disabled =
-        !values.lighting || (values.lighting === "front" && !values.style);
-      break;
-    case 2:
-      disabled = !values.technology;
-      break;
+    // case 1:
+    //   disabled =
+    //     !values.lighting || (values.lighting === "front" && !values.style);
+    //   break;
+    // case 2:
+    //   disabled = !values.technology;
+    //   break;
 
-    case 3:
+    case 1:
       disabled = !values.terms || !signature;
       break;
-    case 4:
+    case 2:
       disabled =
         !values.first_name ||
         !values.surename ||
@@ -146,6 +156,7 @@ const FormSteps = (props) => {
           <Button
             shape="round"
             type="primary"
+            htmlType="submit"
             onClick={() => message.success("Processing complete!")}
             disabled={disabled}
           >

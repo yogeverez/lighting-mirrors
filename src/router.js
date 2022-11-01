@@ -4,6 +4,7 @@ import Landing from "./pages/landing";
 import Terms from "./pages/terms";
 import Privacy from "./pages/privacy";
 import Cancellation from "./pages/cancellation";
+import Payment from "./pages/payment";
 
 const AppRoutes = ({ location }) => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = ({ location }) => {
         <Route path={"/terms"} element={<Terms />} />
         <Route path={"/privacy"} element={<Privacy />} />
         <Route path={"/cancellation"} element={<Cancellation />} />
+        <Route path={"/payment"} element={<Payment />} />
       </Routes>
     </Router>
   );

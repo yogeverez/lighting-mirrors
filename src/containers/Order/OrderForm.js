@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Form } from "antd";
 import Auth from "../../api/auth";
 import FormSteps from "./FormSteps";
+import Payments from "../../api/payments";
+import { useNavigate } from "react-router-dom";
 
 const OrderForm = (props) => {
   const { onChange, values } = props;
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [signature, setSignature] = useState(null);
+  const navigate = useNavigate();
 
   const onValuesChange = (changedValues, allValues) => {
     onChange(allValues);
@@ -28,9 +31,13 @@ const OrderForm = (props) => {
   const onSubmit = async (r) => {
     setLoading(true);
     const order = await Auth.addOrder(r);
+    const res = await Payments.launchPaymentForm(r);
+    const obj = JSON.parse(res);
+    console.log(order);
+    console.log(obj.url);
+    navigate("/payment");
     setLoading(false);
   };
-  console.log(values);
 
   return (
     <Form
