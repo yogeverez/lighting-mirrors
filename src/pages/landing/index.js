@@ -30,8 +30,13 @@ const Landing = () => {
   };
 
   const openPayments = async () => {
-    const res = await Payments.launchPaymentForm();
+    const res = await Payments.getGreenInvoiceToken();
+
+    // const res = await Payments.launchPaymentForm();
     const obj = JSON.parse(res);
+    console.log(res);
+    console.log(obj);
+
     setPaymentUrl(obj.url);
   };
 

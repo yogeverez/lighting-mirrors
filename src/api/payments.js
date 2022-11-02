@@ -1,11 +1,22 @@
+import { getFunctions, httpsCallable } from "firebase/functions";
+const functions = getFunctions();
+const getapikeydetails = httpsCallable(functions, "getapikeydetails");
+const getpaymenturl = httpsCallable(functions, "getpaymenturl");
+
 class Payments {
   prox1 = "https://cors-anywhere.herokuapp.com/";
   prox2 = "https://thingproxy.freeboard.io/fetch/";
+  prox3 = "";
   development = true;
   async getGreenInvoiceToken() {
     const development = false;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Access-Control-Allow-Origin", "*");
+    myHeaders.append("Access-Control-Allow-Credentials", "true");
+    myHeaders.append("Access-Control-Max-Age", "1800");
+    // myHeaders.append("Access-Control-Allow-Headers", "content-type");
+
     var raw = this.development
       ? JSON.stringify({
           id: "2d4207f7-5e34-45b1-8798-a5ff69183e2f",
@@ -25,17 +36,34 @@ class Payments {
       redirect: "follow",
     };
 
-    try {
-      var response = await fetch(this.prox2 + url, requestOptions);
-      const result = await response.text();
-      return result;
-    } catch (error) {
-      console.error(error);
-    }
+    getapikeydetails({ envirovment: "development" }).then((result) => {
+      // Read result of the Cloud Function.
+      /** @type {any} */
+      const data = result.data;
+      console.log(data);
+      const sanitizedMessage = data.text;
+      console.log(sanitizedMessage);
+    });
+
+    // try {
+    //   var response = await fetch(this.prox3 + url, requestOptions);
+    //   const result = await response.text();
+    //   return result;
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+
+  async launchForm(values) {
+    const result = await getpaymenturl({ envirovment: "development", values });
+    const data = result.data;
+    const obj = JSON.parse(data);
+    return obj.url;
   }
 
   async launchPaymentForm(values) {
     console.log(values);
+
     const frame = !values.frame ? "no frame" : `${values["frame-color"]} frame`;
 
     const itemDescription = `${values.height} mirror ${values.height}X${values.width} ${frame}`;

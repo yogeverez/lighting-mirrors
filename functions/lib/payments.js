@@ -1,19 +1,18 @@
-import fetch from "cross-fetch";
-import * as functions from "firebase-functions";
-import { initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+// import * as admin from "firebase-admin";
+// import * as functions from "firebase-functions";
 
-initializeApp(functions.config().firebase);
+const functionsV2 = require("firebase-functions/v2");
+// import * as functions from "firebase-functions";
+const { onCall } = require("firebase-functions/v2/https");
+
+// The Firebase Admin SDK to access Firestore.
+let admin = require("firebase-admin");
 
 const getPaymentsKey = async (envirovment) => {
-  const keyRef = getFirestore().collection("secrets").doc(envirovment);
-  const apiData = await keyRef.get();
-  const apiToken = apiData.data();
-  if (apiToken) {
-    return apiToken;
-  } else {
-    throw new functions.https.HttpsError("internal", "could not get key");
-  }
+  const keyRef = admin.firestore().collection("secrets").doc(data.envirovment);
+  const data = await keyRef.get();
+  const apiToken = apiCategory.data();
+  return apiToken;
 };
 
 const getGreenInvoiceToken = async (envirovment) => {
@@ -29,9 +28,7 @@ const getGreenInvoiceToken = async (envirovment) => {
       : "https://api.greeninvoice.co.il/api/v1/account/token";
   var requestOptions = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: myHeaders,
     body: raw,
     redirect: "follow",
   };
@@ -45,17 +42,21 @@ const getGreenInvoiceToken = async (envirovment) => {
   }
 };
 
-export const getpaymenturl = functions.https.onCall(async (data, context) => {
+export const getPaymentFormUrl = onCall(async (data, context) => {
   const res = await getGreenInvoiceToken(data.envirovment);
   const obj = JSON.parse(res);
+  console.log(obj.token);
 
   var url =
     data.envirovment === "development"
       ? "https://sandbox.d.greeninvoice.co.il/api/v1/payments/form"
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
 
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer '${obj.token}'`);
   const values = data.values;
-  const frame = !values.frame ? "no frame" : `${values["frame-color"]} frame`;
+
   const itemDescription = `${values.height} mirror ${values.height}X${values.width} ${frame}`;
   const name =
     values.business_name && values.business_name !== ""
@@ -71,7 +72,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     maxPayments: 1,
     pluginId: "1a30a11e-ed83-4131-bc89-a7b82b1c826b",
     client: {
-      id: values.id,
+      // id: "7944827a-c664-11e4-8231-080027271114",
       name: name,
       emails: [values.email],
       taxId: values.taxId,
@@ -80,6 +81,8 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       zip: values.zip,
       country: "IL",
       phone: values.phone,
+      // fax: "+972-54-1234567",
+      // mobile: "+972-54-1234567",
       add: true,
     },
     income: [
@@ -100,13 +103,12 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   };
 
   var raw = JSON.stringify(orderDetails);
+  console.log(orderDetails);
 
   var requestOptions = {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer '${obj.token}'`,
-    },
+    //   mode: "no-cors",
+    headers: myHeaders,
     body: raw,
     redirect: "follow",
   };
@@ -120,16 +122,15 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   }
 });
 
-export const getapikeydetails = functions.https.onCall(
-  async (data, context) => {
-    const keyRef = getFirestore().collection("secrets").doc(data.envirovment);
-    const apiData = await keyRef.get();
-    const apiToken = apiData.data();
+export const getApiKey = onCall(async (data, context) => {
+  const keyRef = admin.firestore().collection("secrets").doc(data.envirovment);
 
-    if (apiToken) {
-      return apiToken;
-    } else {
-      throw new functions.https.HttpsError("internal", "could not get key");
-    }
+  const data = await keyRef.get();
+  const apiToken = apiCategory.data();
+
+  if (apiToken) {
+    return apiToken;
+  } else {
+    throw new functionsV2.https.HttpsError("internal", "could not get key");
   }
-);
+});

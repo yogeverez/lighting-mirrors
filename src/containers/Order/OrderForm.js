@@ -31,11 +31,8 @@ const OrderForm = (props) => {
   const onSubmit = async (r) => {
     setLoading(true);
     const order = await Auth.addOrder(r);
-    const res = await Payments.launchPaymentForm(r);
-    const obj = JSON.parse(res);
-    console.log(order);
-    console.log(obj.url);
-    navigate("/payment");
+    const values = { ...r, id: order.id };
+    const url = await Payments.launchForm(values);
     setLoading(false);
   };
 
