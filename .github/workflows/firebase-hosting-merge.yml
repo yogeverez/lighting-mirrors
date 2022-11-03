@@ -16,13 +16,22 @@ jobs:
       - name: install functions packages
         working-directory: ./functions
         run: npm install
-      - run: CI=false yarn build:dev
-      - name: GitHub Action for Firebase
+      - name: Build development
+        run: CI=false yarn build:dev
+      - name: Deploy development
         uses: w9jds/firebase-action@master
         with:
           args: deploy --project=dev --debug
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DEV }}
+      - name: Build production
+        run: CI=false yarn build:prod
+      - name: Deploy production
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --project=prod
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 # jobs:
 #   build_and_deploy:
 #     name: Build and deploy
