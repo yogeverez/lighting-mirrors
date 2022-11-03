@@ -11,14 +11,15 @@ jobs:
           node-version: "14"
           cache: "yarn"
       - run: yarn install
-      - run: CI=false yarn build
-      - name: Deploy
+      - run: CI=false yarn build:prod
+      - name: Deploy prod
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS }}"
           channelId: live
           projectId: lighting-mirrors
+      - run: CI=false yarn build:dev
       - name: Deploy dev
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
