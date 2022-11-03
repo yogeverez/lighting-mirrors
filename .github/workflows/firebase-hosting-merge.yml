@@ -17,7 +17,7 @@ jobs:
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --project=dev
+          args: deploy --project=dev --debug
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 # jobs:
