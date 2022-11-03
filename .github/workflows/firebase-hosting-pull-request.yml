@@ -27,10 +27,3 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS_DEV }}"
           channelId: live
           projectId: lighting-mirrors-dev
-      - name: Deploy functions to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only functions:[dev]
-      env:
-          GCP_SA_KEY: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_LIGHTING_MIRRORS_DEV }}"
-
