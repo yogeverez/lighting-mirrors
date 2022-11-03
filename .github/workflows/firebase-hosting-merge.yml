@@ -19,7 +19,7 @@ jobs:
         with:
           args: deploy --project=dev
         env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DEV }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 # jobs:
 #   build_and_deploy:
 #     name: Build and deploy
