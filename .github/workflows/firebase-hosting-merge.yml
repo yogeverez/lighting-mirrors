@@ -7,12 +7,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: "16"
-      - run: npm ci
-      - run: npm run build:dev
+          cache: "yarn"
+      - run: yarn install
+      - run: CI=false yarn build:dev
       - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@master
         with:
