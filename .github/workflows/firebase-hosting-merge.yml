@@ -4,21 +4,37 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 
-jobs:
-  build_and_deploy:
-    name: Build and deploy
+  jobs:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: "16"
-          cache: "yarn"
-      - run: yarn install
-      - run: CI=false yarn build:dev
-      - name: Deploy to Firebase
+      - run: npm ci
+      - run: npm run build:dev
+      - name: GitHub Action for Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy :[environment "dev"]
+          args: deploy --only hosting
         env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DEV }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+# jobs:
+#   build_and_deploy:
+#     name: Build and deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-node@v3
+#         with:
+#           node-version: "16"
+#           cache: "yarn"
+#       - run: yarn install
+#       - run: CI=false yarn build:dev
+#       - name: Deploy to Firebase
+#         uses: w9jds/firebase-action@master
+#         with:
+#           args: deploy :[environment "dev"]
+#         env:
+#           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY_DEV }}
