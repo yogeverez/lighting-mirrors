@@ -10,6 +10,8 @@ const OrderForm = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [signature, setSignature] = useState(null);
+  const [paymentUrl, setPaymentUrl] = useState(null);
+
   const navigate = useNavigate();
 
   const onValuesChange = (changedValues, allValues) => {
@@ -30,9 +32,14 @@ const OrderForm = (props) => {
 
   const onSubmit = async (r) => {
     setLoading(true);
-    const order = await Auth.addOrder(r);
-    const values = { ...r, id: order.id };
-    const url = await Payments.launchForm(values);
+    let values = { ...r };
+    Object.keys(values).forEach((key) =>
+      values[key] === undefined ? delete values[key] : {}
+    );
+    const order = await Auth.addOrder(values);
+    const url = await Payments.launchForm({ ...values, id: order.id });
+    setPaymentUrl(url);
+    console.log(url);
     setLoading(false);
   };
 
@@ -49,6 +56,8 @@ const OrderForm = (props) => {
         values={values}
         addSignature={addSignature}
         signature={signature}
+        loading={loading}
+        paymentUrl={paymentUrl}
       />
     </Form>
   );

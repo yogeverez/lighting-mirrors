@@ -1,5 +1,5 @@
 import { Button, message, Steps } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PersonalDetails from "./components/PersonalDetails";
 import Specifications from "./components/Specifications";
 import Technology from "./components/Technology";
@@ -13,7 +13,13 @@ const { Step } = Steps;
 
 const FormSteps = (props) => {
   const [current, setCurrent] = useState(0);
-  const { values, addSignature, signature } = props;
+  const { values, addSignature, signature, paymentUrl, loading } = props;
+
+  useEffect(() => {
+    if (paymentUrl && current === 2) {
+      next();
+    }
+  }, [paymentUrl]);
 
   const steps = [
     {
@@ -49,7 +55,7 @@ const FormSteps = (props) => {
     {
       index: 3,
       title: "תשלום",
-      content: <Payment />,
+      content: <Payment paymentUrl={paymentUrl} />,
     },
   ];
 
@@ -142,7 +148,7 @@ const FormSteps = (props) => {
             הקודם
           </Button>
         )}
-        {current < steps.length - 1 && (
+        {current < steps.length - 2 && (
           <Button
             disabled={disabled}
             shape="round"
@@ -152,13 +158,13 @@ const FormSteps = (props) => {
             הבא
           </Button>
         )}
-        {current === steps.length - 1 && (
+        {current === steps.length - 2 && (
           <Button
             shape="round"
             type="primary"
             htmlType="submit"
-            onClick={() => message.success("Processing complete!")}
             disabled={disabled}
+            loading={loading}
           >
             מעבר לדף התשלום
           </Button>

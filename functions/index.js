@@ -71,7 +71,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     maxPayments: 1,
     pluginId: "1a30a11e-ed83-4131-bc89-a7b82b1c826b",
     client: {
-      id: values.id,
+      //   id: values.id,
       name: name,
       emails: [values.email],
       taxId: values.taxId,
@@ -96,7 +96,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     //   successUrl: "http://localhost:3000/",
     //   failureUrl: "http://localhost:3000/",
     //   notifyUrl: "http://localhost:3000",
-    custom: "some custom data comes here",
+    custom: values.id,
   };
 
   var raw = JSON.stringify(orderDetails);

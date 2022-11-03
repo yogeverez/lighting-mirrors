@@ -1,3 +1,4 @@
+import app from "../fbconfig";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth } from "firebase/auth";
@@ -13,8 +14,8 @@ export const firebaseConfig = {
   measurementId: "G-PSCLQ0MC8Q",
 };
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
 const auth = initializeAuth(app, {

@@ -4,11 +4,7 @@ import Iframe from "react-iframe";
 import { useMediaQuery } from "react-responsive";
 const Payment = (props) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 470px)" });
-
-  const [paymentUrl, setPaymentUrl] = useState(
-    "https://sandbox.payme.io/sale/generate/SALE1667-228660MO-PWZL6UDC-BLTCFI3F"
-  );
-  const { values } = props;
+  const { values, paymentUrl } = props;
   return (
     <Row>
       <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>

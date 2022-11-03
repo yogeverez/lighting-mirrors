@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "lighting-mirrors"
-  }
+    "default": "lighting-mirrors",
+    "prod": "lighting-mirrors",
+    "dev": "lighting-mirrors-dev"
+  },
+  "targets": {},
+  "etags": {}
 }
