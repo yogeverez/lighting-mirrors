@@ -93,8 +93,8 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       },
     ],
     remarks: "Some remarks",
-    //   successUrl: "http://localhost:3000/",
-    //   failureUrl: "http://localhost:3000/",
+    successUrl: values.successUrl,
+    failureUrl: values.failureUrl,
     //   notifyUrl: "http://localhost:3000",
     custom: values.id,
   };

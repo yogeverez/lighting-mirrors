@@ -4,7 +4,8 @@ import Landing from "./pages/landing";
 import Terms from "./pages/terms";
 import Privacy from "./pages/privacy";
 import Cancellation from "./pages/cancellation";
-import Payment from "./pages/payment";
+import PaymentSuccess from "./pages/paymentSuccess";
+import PaymentFailure from "./pages/paymentFailure";
 
 const AppRoutes = ({ location }) => {
   return (
@@ -14,7 +15,8 @@ const AppRoutes = ({ location }) => {
         <Route path={"/terms"} element={<Terms />} />
         <Route path={"/privacy"} element={<Privacy />} />
         <Route path={"/cancellation"} element={<Cancellation />} />
-        <Route path={"/payment"} element={<Payment />} />
+        <Route path={"/payment-success"} element={<PaymentSuccess />} />
+        <Route path={"/payment-failure"} element={<PaymentFailure />} />
       </Routes>
     </Router>
   );

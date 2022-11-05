@@ -8,7 +8,6 @@ import Auth from "./api/auth";
 
 import "antd/dist/antd.css";
 
-console.log(theme);
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
