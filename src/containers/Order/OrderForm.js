@@ -39,9 +39,10 @@ const OrderForm = (props) => {
     const order = await Auth.addOrder(values);
     const successUrl = `${window.location.origin}/transactionsuccess`;
     const failureUrl = `${window.location.origin}/transactionfailure`;
+    console.log(order.id);
     const url = await Payments.launchForm({
       ...values,
-      id: order.id,
+      id: order.id.toString(),
       successUrl,
       failureUrl,
     });

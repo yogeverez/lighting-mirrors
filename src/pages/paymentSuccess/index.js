@@ -3,8 +3,14 @@ import { Button, Result } from "antd";
 import { Link, useParams } from "react-router-dom";
 
 const PaymentSuccess = () => {
-  let params = useParams();
-  console.log(params);
+  // const { requestId } = useParams();
+  // console.log(requestId);
+  // console.log(window.location);
+  let params = new URL(document.location).searchParams;
+  let requestId = params.get("requestId"); // is the string "Jonathan Smith".
+  // let age = parseInt(params.get('age')); // is the number 18
+
+  console.log(requestId);
 
   return (
     <div>

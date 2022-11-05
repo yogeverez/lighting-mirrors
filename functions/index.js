@@ -62,7 +62,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       ? values.business_name
       : `${values.first_name} ${values.surename}`;
   const orderDetails = {
-    description: "טופז תשלום",
+    description: "מראה מוארת וחכמה בהתאמה אישית",
     type: 320,
     lang: "he",
     currency: "ILS",
