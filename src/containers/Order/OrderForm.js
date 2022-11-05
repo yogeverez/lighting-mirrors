@@ -37,8 +37,8 @@ const OrderForm = (props) => {
       values[key] === undefined ? delete values[key] : {}
     );
     const order = await Auth.addOrder(values);
-    const successUrl = `${window.location.origin}/payment-success`;
-    const failureUrl = `${window.location.origin}/payment-failure`;
+    const successUrl = `${window.location.origin}/transactionsuccess`;
+    const failureUrl = `${window.location.origin}/transactionfailure`;
     const url = await Payments.launchForm({
       ...values,
       id: order.id,
