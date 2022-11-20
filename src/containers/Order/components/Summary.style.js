@@ -40,13 +40,10 @@ const SummaryWrapper = styled.div`
     // background-color: green;
   }
   .mirror {
-    width: ${(props) =>
-      props["mirrorWidth"]
-        ? `${(props["mirrorWidth"] * (props["width"] - 40)) / 100}px`
-        : "0%"};
+    width: ${(props) => `${props["width"]}px`};
     height: ${(props) =>
       props["mirrorHeight"]
-        ? `${(props["mirrorHeight"] * (props["width"] - 40)) / 100}px`
+        ? `${(props["mirrorHeight"] / props["mirrorWidth"]) * props["width"]}px`
         : "0%"};
     // background-color: white;
     background: url(${pattern}) no-repeat center;

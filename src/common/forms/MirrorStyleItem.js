@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Form, Radio } from "antd";
 import { getFormItemVaidation } from "./helpers";
+import dashboard from "../assets/image/mirrors/front.png";
+
 import JYR001 from "..//assets/image/mirrors/1.png";
 import JYR002 from "..//assets/image/mirrors/2.png";
 import JYR003 from "..//assets/image/mirrors/3.png";
@@ -29,12 +31,17 @@ import JYS012 from "..//assets/image/mirrors/26.png";
 const MirrorStyleItem = (props) => {
   const { name, required, onChange, disabled, label, values } = props;
   let list = [
-    {
-      src: JYR001,
-      value: "JY-R001",
-      shape: "round",
-      lighting: "back",
-    },
+    // {
+    //   value: "JY-Rd001",
+    //   shape: "round",
+    //   lighting: "back",
+    // },
+    // {
+    //   src: JYR001,
+    //   value: "JY-R001",
+    //   shape: "round",
+    //   lighting: "back",
+    // },
     {
       src: JYR002,
       value: "JY-R002",
@@ -53,12 +60,12 @@ const MirrorStyleItem = (props) => {
       shape: "round",
       lighting: "front",
     },
-    {
-      src: JYR005,
-      value: "JY-R005",
-      shape: "round",
-      lighting: "back",
-    },
+    // {
+    //   src: JYR005,
+    //   value: "JY-R005",
+    //   shape: "round",
+    //   lighting: "back",
+    // },
     {
       src: JYR006,
       value: "JY-R006",
@@ -188,7 +195,7 @@ const MirrorStyleItem = (props) => {
             value={item["value"]}
             disabled={disabled}
             style={{
-              width: "31%",
+              // width: "31%",
               paddingBottom: "10px",
               display: "flex",
               flexDirection: "row",

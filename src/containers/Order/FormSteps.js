@@ -77,9 +77,9 @@ const FormSteps = (props) => {
         !values.height ||
         !values.height ||
         !values.shape ||
-        !values.corners ||
+        (values.shape === "rectangle" && !values.corners) ||
         values.frame === undefined ||
-        !values["frame-color"] ||
+        (values.frame === true && !values["frame-color"]) ||
         !values.lighting ||
         (values.lighting === "front" && !values.style) ||
         !values.technology;

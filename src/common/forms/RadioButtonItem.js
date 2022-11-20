@@ -56,12 +56,12 @@ const RadioButtonItem = (props) => {
     } else if (lighting) {
       list = [
         {
-          id: "front",
-          name: "קדמית",
+          id: "back",
+          name: "אחורית (מומלץ)",
         },
         {
-          id: "back",
-          name: "אחורית",
+          id: "front",
+          name: "קדמית",
         },
       ];
     } else if (shape) {

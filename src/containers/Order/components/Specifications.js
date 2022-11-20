@@ -44,12 +44,14 @@ const Specifications = (props) => {
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>
-            <RadioButtonItem
-              name={"corners"}
-              corners={true}
-              required={true}
-              label={"פינות"}
-            />
+            {values.shape === "rectangle" && (
+              <RadioButtonItem
+                name={"corners"}
+                corners={true}
+                required={true}
+                label={"פינות"}
+              />
+            )}
           </div>
         </ResponsiveItemsWrapper>
 
@@ -64,12 +66,14 @@ const Specifications = (props) => {
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>
-            <RadioButtonItem
-              name={"frame-color"}
-              frameColor={true}
-              required={true}
-              label={"צבע המסגרת"}
-            />
+            {values.frame === true && (
+              <RadioButtonItem
+                name={"frame-color"}
+                frameColor={true}
+                required={true}
+                label={"צבע המסגרת"}
+              />
+            )}
           </div>
         </ResponsiveItemsWrapper>
 
@@ -86,18 +90,16 @@ const Specifications = (props) => {
           <div style={{ flex: 1 }}></div>
         </ResponsiveItemsWrapper>
 
-        {values.lighting === "front" && (
-          <ResponsiveItemsWrapper>
-            <div style={{ flex: 1 }}>
-              <MirrorStyleItem
-                name={"style"}
-                required={true}
-                label={"סגנון המראה"}
-                values={values}
-              />
-            </div>
-          </ResponsiveItemsWrapper>
-        )}
+        <ResponsiveItemsWrapper>
+          <div style={{ flex: 1 }}>
+            <MirrorStyleItem
+              name={"style"}
+              required={true}
+              label={"סגנון המראה"}
+              values={values}
+            />
+          </div>
+        </ResponsiveItemsWrapper>
 
         <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>

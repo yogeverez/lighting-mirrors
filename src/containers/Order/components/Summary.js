@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SummaryWrapper from "./Summary.style";
 import Signature from "../../../common/components/Signature";
+import InputNumberItem from "../../../common/forms/InputNumberItem";
 import { useMediaQuery } from "react-responsive";
 import functions from "../../../common/assets/image/mirrors/functions.png";
 import simple from "../../../common/assets/image/mirrors/simple.png";
@@ -10,6 +11,8 @@ import Pricing from "./Pricing";
 const Summary = (props) => {
   const { values, addSignature } = props;
   const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
   const [mirrorHeight, setMirrorHeight] = useState(0);
   const [mirrorWidth, setMirrorWidth] = useState(0);
 
@@ -22,13 +25,15 @@ const Summary = (props) => {
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 670px)" });
   console.log(values);
+
   useEffect(() => {
-    if (isBigScreen) {
-      setWidth(window.innerWidth / 2 - 40);
-    } else {
-      setWidth(window.innerWidth - 40);
-    }
-  }, [isBigScreen]);
+    const maxWidth = isBigScreen
+      ? window.innerWidth / 2 - 80
+      : window.innerWidth - 80;
+    const ratio = mirrorWidth / mirrorHeight;
+    const finalWidth = ratio > 1 ? maxWidth : maxWidth * ratio;
+    setWidth(finalWidth);
+  }, [mirrorWidth, mirrorHeight, isBigScreen]);
 
   useEffect(() => {
     if (values.height) {
@@ -67,6 +72,7 @@ const Summary = (props) => {
     <SummaryWrapper
       isBigScreen={isBigScreen}
       width={width}
+      height={height}
       mirrorHeight={mirrorHeight}
       mirrorWidth={mirrorWidth}
       border={border}
@@ -76,6 +82,11 @@ const Summary = (props) => {
       borderRadius={borderRadius}
     >
       <div className="container">
+        <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
+          <Spec values={values} />
+          <Signature onChangeSignature={onChangeSignature} />
+          <InputNumberItem name={"quantity"} required={true} label={"כמות"} />
+        </div>
         <div className="outer">
           <div className="inner">
             <div className="mirror" />
@@ -94,9 +105,7 @@ const Summary = (props) => {
             )}
           </div>
         </div>
-        <Spec values={values} />
       </div>
-      <Signature onChangeSignature={onChangeSignature} />
       <Pricing />
     </SummaryWrapper>
   );
