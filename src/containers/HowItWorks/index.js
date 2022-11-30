@@ -7,10 +7,10 @@ import Link from "../../common/components/Link";
 import Heading from "../../common/components/Heading";
 import Text from "../../common/components/Text";
 import Section, { SectionHeading, Grid, Item } from "./howItWorks.style";
-import icon1 from "../../common/assets/image/icons/1.png";
-import icon2 from "../../common/assets/image/icons/2.png";
-import icon3 from "../../common/assets/image/icons/3.png";
-import icon4 from "../../common/assets/image/icons/4.png";
+import icon1 from "../../common/assets/image/icons/size.png";
+import icon2 from "../../common/assets/image/icons/display-frame.png";
+import icon3 from "../../common/assets/image/icons/lamp.png";
+import icon4 from "../../common/assets/image/icons/smartphone.png";
 const HowItWorks = () => {
   const howTos = [
     {
@@ -19,6 +19,7 @@ const HowItWorks = () => {
       title: "בחר גודל וצורה",
       text: "ניתן לבחור מראות בגדלים משתנים בהתאם לצרכים שלך",
       linkLabel: "Learn More",
+      bg: "#EDF6FC",
       link: "#",
     },
     {
@@ -27,6 +28,7 @@ const HowItWorks = () => {
       title: "בחר מסגרת",
       text: "ניתן לבחור למססרת גם צבע וגם האם הפינות יהיו מעוגלות או ישרות",
       linkLabel: "Learn More",
+      bg: "#E3FFF2",
       link: "#",
     },
     {
@@ -35,6 +37,7 @@ const HowItWorks = () => {
       title: "בחר סוג תאורה",
       text: `ניתן לבחור בין תאורה קדמית לתאורה אחורית`,
       linkLabel: "Learn More",
+      bg: "#F9F1FA",
       link: "#",
     },
     {
@@ -43,6 +46,7 @@ const HowItWorks = () => {
       title: "בחר טכנולוגייה",
       text: `המראה החכמה שלכם יכולה לשלב פיצ׳רים שונים בהתאם לצרכים שלכם`,
       linkLabel: "Learn More",
+      bg: "#FFEFEE",
       link: "#",
     },
   ];
@@ -56,8 +60,30 @@ const HowItWorks = () => {
         <Grid>
           {howTos.map((howTo) => (
             <Item key={howTo.id}>
-              <figure>
-                <Image src={howTo.icon} alt="icon" />
+              <figure
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: howTo.bg,
+                    borderRadius: "20px",
+                    height: "85px",
+                    width: "85px",
+                  }}
+                >
+                  <Image
+                    src={howTo.icon}
+                    alt="icon"
+                    style={{ height: "60px" }}
+                  />
+                </div>
               </figure>
               <Heading as="h4" content={howTo.title} />
               <Text content={howTo.text} />

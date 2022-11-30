@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { themeGet } from "@styled-system/theme-get";
 
 const SectionWrapper = styled.section`
-  background-color: #f9f9f9;
+  background-color: #cfe3ff1f;
   padding: 75px 0;
   overflow: hidden;
   @media only screen and (max-width: 1366px) {
@@ -98,11 +98,15 @@ export const FeatureWrapper = styled.div`
       @media only screen and (max-width: 1366px) {
         img {
           height: 72px;
+          width: 40px;
+          height: auto;
         }
       }
       @media only screen and (max-width: 480px) {
         img {
           height: 70px;
+          width: 40px;
+          height: auto;
         }
       }
       i {
@@ -129,7 +133,7 @@ export const FeatureWrapper = styled.div`
       }
     }
     .content__wrapper {
-      padding-left: 21px;
+      padding-right: 21px;
       @media only screen and (max-width: 1366px) {
         padding: 0 20px;
       }

@@ -23,33 +23,33 @@ const Faq = () => {
       faqs: [
         {
           id: 1,
-          title: "01. What is the process of project final delivery system?",
+          title: "מדוע יש צורך במראה חכמה בהתאמה אישית?",
           description:
-            "Our Customer Experience Team is available 7 days a week and we offer 2 ways to get in contact.Email and Chat. We try to reply quickly, so you need not to wait too long for a response!.",
+            "הכל התחיל בצורך שהתעורר אצלנו למצוא מראה בהתאמה אישית שתענה על הדרישות שלנו. רצינו מראה שתהיה אסתטית ונעימה לעין וגם חכמה. רצינו לעצבה לפי מידות חדר הרחצה ובמחיר סביר. ביצענו סקר שוק מקיף מאוד ולא מצאנו מראה שתענה על כל הדרישות שלנו. אז החלטנו לקחת את המושכות לידיים ולהתחיל לייצר ולעזור גם לכם ליצור את המראה שדמיינתם ,לפי הדרישות שלכם, במחיר סביר ולהביאה עד לדלת ביתכם.",
         },
         {
           id: 2,
-          title: "02. What is payment process, believe in upfront?",
+          title: "מה היתרונות של המראה?",
           description:
-            "Please read the documentation carefully. We also have some online  video tutorials regarding this issue. If the problem remains, Please Open a ticket in the support forum.",
+            "אנחנו יודעים לייצר עבורכם מראה מוארת וחכמה המיוצרת בהתאם לדרישות הייחודיות שלכם. אתם שולטים על גודל המראה, הצבע שלה, צורת וצבע המסגרת, סוג וצבע התאורה, סוג הטכנולוגיה שתוטמע במראה (אלו פיצ׳רים יתווספו למראה), והכל בהתאם לצרכים האישיים שלכם.",
         },
         {
           id: 3,
-          title: "03. What is the process of project final delivery system?",
+          title: "מה זו מראה חכמה?",
           description:
-            "At first, Please check your internet connection. We also have some online  video tutorials regarding this issue. If the problem remains, Please Open a ticket in the support forum.",
+            "למראות החכמות שלנו ניתן להוסיף פיצ'רים רבים: חיישן קרבה - חיישן המפעיל את המראה כאשר היא מזהה אדם מולה בקרבה של 50 סנטימטרים. התקן בלוטוס המאפשר התחברות למראה והשמעת מוזיקה. מתג בחירת סוגי תאורה - חמה/קרה וטבעית. אתם יכולים לשלוט גם בעוצמת התאורה, לחיצה ארוכה תקטין או תגדיל את עוצמת התאורה עד לקבלת העוצמה הרצויה. הפשרת אדים - הסוף לאדים בזמן המקלחת. תוכלו לראות את עצמכם בצורה חלקה גם בחדר אפוף אדים. תצוגת טמפרטורה וזמן.",
         },
         {
           id: 4,
-          title: "04. Estimate project budget for categories?",
+          title: "איך מבצעים הזמנה באתר?",
           description:
-            "Our core members created this place for Designers, Developers, Product Owners, Marketing Managers, startup's, Freelancers and really for everyone who appreciates fine designs and well-crafted sites. We want to inspire and support you in the process of creating your own unique website projects.",
+            "בדף הראשי ישנו כפתור בצידו השמאלי העליון הנקרא - הזמן מראה בהתאמה אישית שדרכו מבצעים את הזמנת המראות. יש למלא את פרטי המזמין, את נתוני המראה - רוחב, אורך, צורה, פינות, מסגרת, צבע מסגרת, סוג טכנולוגיה וסוג תאורה .לאחר שתמלאו את כל הפרטים תגיעו לדף מסכם עם כל פרטי המראה כולל העלות. תחתמו כי אתם מאשרים את פרטי ההזמנה והמראות יהיו בדרך אליכם.",
         },
         {
           id: 5,
-          title: "05. All about project customization & monetization",
+          title: "יש לי התלבטות לגבי איזו מידה להזמין?",
           description:
-            "We are giving the update of this theme continuously. You will receive an email Notification when we push an update. Always try to be updated with us.",
+            "בבחירה של מראה לחדר האמבטיה חשוב לבצע את כל המדידות בטרם רכישת המראה. יש לבדוק מהו השטח העומד לרשותכם. כדאי למדוד לא רק את השטח על הקיר, אלא גם את גודלם של אביזרים המוצבים בסביבת המראה, למשל ארונות האמבטיה. המטרה היא ליצור מראה פרופורציונלי, מאוזן ונאה. במידה והמראה מוצבת בחדר הרחצה, רצוי כי שטחה לא יחרוג משטח ארונות האמבטיה. במידה וישנם שני כיורים, יש לקחת בחשבון שיקול נוסף והוא האם לתלות מראה בודדת או שתי מראות המוצבות מעל כל כיור בנפרד. את המראה יש למקם בגובה המותאם לגובה המשתמשים בה.",
         },
       ],
     },

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { themeGet } from "@styled-system/theme-get";
 
 const Section = styled.section`
-  background-color: #f9f9f9;
+  background-color: #cfe3ff1f;
   padding-top: 60px;
   padding-bottom: 120px;
   @media (max-width: 1024px) {

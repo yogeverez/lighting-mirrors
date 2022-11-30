@@ -3,8 +3,8 @@ import { themeGet } from "@styled-system/theme-get";
 import Collapse from "rc-collapse";
 
 const Section = styled.section`
-  padding: 80px 0;
-  background: #f4f4f4;
+  padding: 80px 10px;
+  background: #cfe3ff;
   @media (max-width: 1280px) {
     padding-top: 50px;
   }
