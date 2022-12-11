@@ -13,7 +13,7 @@ import Footer from "../../containers/Footer";
 import Order from "../../containers/Order";
 import Payments from "../../api/payments";
 import { Button } from "antd";
-
+import { getOrderPdf } from "../../common/forms/helpers";
 import { GlobalStyle, ContentWrapper } from "../../common/assets/css/app.style";
 import Iframe from "react-iframe";
 
@@ -30,14 +30,48 @@ const Landing = () => {
   };
 
   const openPayments = async () => {
-    const res = await Payments.getGreenInvoiceToken();
+    const values = {
+      width: "40CM",
+      height: "40CM",
+      shape: "rectangle",
+      frame: true,
+      lighting: "back",
+      style: "JY-S002",
+      technology: [
+        "Brightness control",
+        "Intelligent defogging",
+        "Human-body induction",
+        "Time / Temperature display",
+        "Bluetooth",
+      ],
+      quantity: 2,
+      terms: true,
+      first_name: "יוגב",
+      surename: "ארז",
+      business_name: "ארזים שירותי סיעוד",
+      taxId: "511294662",
+      city: "גבעת ברנר",
+      street: "התאנה",
+      house_number: "20",
+      apartmant_number: "22",
+      floor_number: "22",
+      zip: "4234243",
+      phone: "+972508698824",
+      email: "yogeverez@gmail.com",
+      delivery_notes: "אין הערות",
+      corners: "straight",
+      "frame-color": "black",
+    };
+    getOrderPdf(values);
 
-    // const res = await Payments.launchPaymentForm();
-    const obj = JSON.parse(res);
-    console.log(res);
-    console.log(obj);
+    // const res = await Payments.getGreenInvoiceToken();
 
-    setPaymentUrl(obj.url);
+    // // const res = await Payments.launchPaymentForm();
+    // const obj = JSON.parse(res);
+    // console.log(res);
+    // console.log(obj);
+
+    // setPaymentUrl(obj.url);
   };
 
   return (

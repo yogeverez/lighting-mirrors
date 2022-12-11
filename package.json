@@ -12,6 +12,7 @@
     "env-cmd": "^10.1.0",
     "firebase": "^9.10.0",
     "framer-motion": "^7.4.0",
+    "jspdf": "^2.5.1",
     "libphonenumber-js": "^1.10.13",
     "polished": "^4.2.2",
     "rc-collapse": "^3.4.2",
