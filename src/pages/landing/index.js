@@ -62,7 +62,10 @@ const Landing = () => {
       corners: "straight",
       "frame-color": "black",
     };
-    getOrderPdf(values);
+
+    const english = true;
+    const hebrew = true;
+    getOrderPdf(values, hebrew, english);
 
     // const res = await Payments.getGreenInvoiceToken();
 

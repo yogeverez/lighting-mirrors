@@ -71,10 +71,101 @@ const getPdfMargins = (doc) => {
   return 40 / doc.internal.scaleFactor;
 };
 
-const getOrderPdf = (values) => {
-  let orderPdf = new jsPDF({ orientation: "p" });
-  setHeader(orderPdf, values);
+const getAutoTableData = (data, intl, category) => {
+  let columns = [];
+  if (data[0]) {
+    Object.keys(data[0]).forEach((key) =>
+      columns.push({
+        header: key,
+        dataKey: key,
+      })
+    );
+  }
+  return {
+    columns: columns,
+    body: data,
 
+    headStyles: {
+      fillColor: "#464646",
+    },
+    alternateRowStyles: {
+      fillColor: "#FAFAFA",
+    },
+  };
+};
+
+const getOrderPdf = (values, hebrew, english) => {
+  let orderPdf = new jsPDF({ orientation: "p" });
+
+  orderPdf.setR2L(true);
+  const table = {
+    ...getAutoTableData(tableData, intl, category),
+    didDrawPage: function (data) {
+      // Top content
+      setProductTable(orderPdf, values, headerHeight, hebrew, english);
+    },
+    didParseCell: function (data) {
+      // if (
+      //   data.column.index !== 0 &&
+      //   data.row.section !== "head" &&
+      //   (data.row.raw.day.content === "שבת" ||
+      //     data.row.raw.holiday.content !== "")
+      // ) {
+      //   data.cell.styles.fillColor = ["#d9d9d9"];
+      // }
+
+      // if (
+      //   (data.column.index === 2 ||
+      //     data.column.index === 3 ||
+      //     data.column.index === 4 ||
+      //     data.column.index === 5 ||
+      //     data.column.index === 6 ||
+      //     data.column.index === 7) &&
+      //   data.row.section !== "head"
+      // ) {
+      //   data.cell.styles.fontStyle = "bold";
+      // }
+      const isHebrew = (text) => {
+        return text.search(/[\u0590-\u05FF]/) >= 0;
+      };
+      if (!isHebrew(data.cell.text[0])) {
+        data.cell.text = data.cell.text[0].split("").reverse().join("");
+      }
+    },
+    // ...rest,
+    styles: {
+      fontSize: 9,
+      font: "Rubik",
+      halign: "right",
+      // cellWidth: "wrap",
+      overflow: "linebreak",
+      lineColor: [40],
+      lineWidth: 0.3,
+      cellPadding: 0.5,
+    },
+    headStyles: {
+      fillColor: [255, 255, 255],
+      textColor: 40,
+    },
+    startY: orderPdf.lastAutoTable.finalY + 2,
+    theme: "grid",
+  };
+  orderPdf.autoTable(table);
+  // if (setBottomContent) {
+  //   setBottomContent(doc, bottomContentRecord, setHeader, headerRecord, intl);
+  // }
+  // return doc;
+
+  const headerHeight = setHeader(orderPdf, values, hebrew, english);
+  const productTableHeight = setProductTable(
+    orderPdf,
+    values,
+    headerHeight,
+    hebrew,
+    english
+  );
+
+  console.log(headerHeight);
   window.open(orderPdf.output("bloburl"), "_blank");
 
   console.log(values);
@@ -110,7 +201,7 @@ const setEnHeItem = (doc, Hloc, vLoc, content, align) => {
 };
 export { getFormItemVaidation, getOrderPdf };
 
-export const setHeader = (doc, values) => {
+export const setHeader = (doc, values, hebrew, english) => {
   const margins = getPdfMargins(doc);
   const rightMargin = doc.internal.pageSize.getWidth() - margins;
 
@@ -208,41 +299,17 @@ export const setHeader = (doc, values) => {
   currentHeight += pdfConfig.subLineHeight;
   doc.text(margins, currentHeight, values.email, "left");
   doc.text(rightMargin, currentHeight, values.email, "right");
+  currentHeight += pdfConfig.subLineHeight;
 
-  // doc.setFontSize(9);
-  // doc.setTextColor(40);
-  // doc.setR2L(true);
-  // doc.setFont("Rubik", "normal"); // set font
+  return currentHeight;
+};
 
-  var hLoc = doc.internal.pageSize.getWidth() - margins;
-  // doc.text(from, hLoc, 20, {
-  //   align: "right",
-  // });
-  doc.setFont("Rubik", "normal");
-  // doc.text(phoneText, margins, 20, {
-  //   align: "left",
-  // });
-  // doc.text(mobileText, margins, 24, {
-  //   align: "left",
-  // });
-  // doc.text(addressText, margins, 30, {
-  //   align: "left",
-  // });
-  const logo = JYR004;
-  // if (logo) {
-  //   doc.addImage(
-  //     logo,
-  //     "png",
-  //     doc.internal.pageSize.getWidth() / 2 - margins,
-  //     12,
-  //     (12 / logo.height) * logo.width,
-  //     12
-  //   );
-  // }
-  doc.setFontSize(14);
-  doc.setFont("Rubik", "bold");
-  // doc.text(title, hLoc, 31, {
-  //   align: "right",
-  // });
-  doc.setFont("Rubik", "normal");
+export const setProductTable = (
+  doc,
+  values,
+  initialHeight,
+  hebrew,
+  english
+) => {
+  return;
 };
