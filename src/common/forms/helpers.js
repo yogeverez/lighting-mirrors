@@ -1,6 +1,22 @@
 import jsPDF from "jspdf";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import JYR004 from "../assets/image/mirrors/4.png";
+import autoTable from "jspdf-autotable";
+import { setPersistence } from "firebase/auth";
+import moment from "moment";
+
+var colorBlack = "#000000";
+var colorGray = "#4d4e53";
+
+var pdfConfig = {
+  headerTextSize: 20,
+  labelTextSize: 12,
+  fieldTextSize: 10,
+  declerationTextSize: 8,
+  lineHeight: 6,
+  subLineHeight: 4,
+  titleLineHeight: 8,
+};
 
 const getFormItemVaidation = (label, arr) => {
   const requiredMessage = label + " " + "הוא שדה חובה";
@@ -71,7 +87,7 @@ const getPdfMargins = (doc) => {
   return 40 / doc.internal.scaleFactor;
 };
 
-const getAutoTableData = (data, intl, category) => {
+const getAutoTableData = (data) => {
   let columns = [];
   if (data[0]) {
     Object.keys(data[0]).forEach((key) =>
@@ -94,45 +110,91 @@ const getAutoTableData = (data, intl, category) => {
   };
 };
 
+const getHebrewData = (values) => {
+  const columns = {
+    frame: "מסגרת",
+    "frame-color": "צבע מסגרת",
+    height: "גובה",
+    width: "רוחב",
+    lighting: "סוג תאורה",
+    quantity: "כמות",
+    shape: "צורה",
+    technology: "טכנולוגייה",
+    price: "עלות",
+  };
+  const dic = {
+    withFrame: "עם מסגרת",
+    noFrame: "ללא מסגרת",
+    straight: "ישרות",
+    rounded: "מעוגלות",
+    back: "תאורה אחורית",
+    front: "תאורה קדמית",
+    rectangle: "מלבנית",
+    round: "עגולה",
+    elipse: "אליפסה",
+    black: "שחור",
+    gold: "זהב",
+    "Brightness control": "שליטה על עוצמת תאורה",
+    "Intelligent defogging": "הפשרת אדים",
+    "Human-body induction": "חיישן קירבה",
+    "Time / Temperature display": "תצוגת זמן וטמפרטורה",
+    Bluetooth: "התקן בלוטוס",
+    "Three color lights": "שלושה סוגי תאורה",
+  };
+
+  let data = [
+    {
+      [columns["price"]]: "2,500",
+      [columns["quantity"]]: values.quantity,
+      [columns["technology"]]: values["technology"]
+        .map((i) => dic[i])
+        .join(", "),
+      [columns["shape"]]: dic[values["shape"]],
+      [columns["lighting"]]: dic[values["lighting"]],
+      [columns["frame-color"]]: dic[values["frame-color"]],
+      [columns["frame"]]: dic[values["frame"]],
+      [columns["width"]]: values.width,
+      [columns["height"]]: values.height,
+    },
+  ];
+
+  return data;
+};
+
 const getOrderPdf = (values, hebrew, english) => {
   let orderPdf = new jsPDF({ orientation: "p" });
+  const tableData = getHebrewData(values);
+  // orderPdf.setR2L(true);
+  const headerHeight = setHeader(orderPdf, values, hebrew, english);
+  // const titleHeight = setTitle(orderPdf, values, hebrew, english, headerHeight);
 
-  orderPdf.setR2L(true);
+  let columnStyles = {
+    0: { cellWidth: 12, fillColor: [255, 255, 255] },
+    1: { cellWidth: 9, fillColor: [255, 255, 255] },
+    2: { cellWidth: 60, fillColor: [255, 255, 255] },
+    3: { cellWidth: 15, fillColor: [255, 255, 255] },
+    4: { cellWidth: 22, fillColor: [255, 255, 255] },
+    5: { cellWidth: 20, fillColor: [255, 255, 255] },
+    6: { cellWidth: 15, fillColor: [255, 255, 255] },
+    7: { cellWidth: 15, fillColor: [255, 255, 255] },
+  };
   const table = {
-    ...getAutoTableData(tableData, intl, category),
+    ...getAutoTableData(tableData),
     didDrawPage: function (data) {
       // Top content
-      setProductTable(orderPdf, values, headerHeight, hebrew, english);
+      // setProductTable(orderPdf, values, headerHeight, hebrew, english);
     },
     didParseCell: function (data) {
-      // if (
-      //   data.column.index !== 0 &&
-      //   data.row.section !== "head" &&
-      //   (data.row.raw.day.content === "שבת" ||
-      //     data.row.raw.holiday.content !== "")
-      // ) {
-      //   data.cell.styles.fillColor = ["#d9d9d9"];
-      // }
-
-      // if (
-      //   (data.column.index === 2 ||
-      //     data.column.index === 3 ||
-      //     data.column.index === 4 ||
-      //     data.column.index === 5 ||
-      //     data.column.index === 6 ||
-      //     data.column.index === 7) &&
-      //   data.row.section !== "head"
-      // ) {
-      //   data.cell.styles.fontStyle = "bold";
-      // }
       const isHebrew = (text) => {
         return text.search(/[\u0590-\u05FF]/) >= 0;
       };
-      if (!isHebrew(data.cell.text[0])) {
+      if (isHebrew(data.cell.text[0])) {
         data.cell.text = data.cell.text[0].split("").reverse().join("");
       }
     },
+
     // ...rest,
+    columnStyles,
     styles: {
       fontSize: 9,
       font: "Rubik",
@@ -147,16 +209,28 @@ const getOrderPdf = (values, hebrew, english) => {
       fillColor: [255, 255, 255],
       textColor: 40,
     },
-    startY: orderPdf.lastAutoTable.finalY + 2,
+    startY: headerHeight,
     theme: "grid",
   };
   orderPdf.autoTable(table);
+
+  let finalY = orderPdf.lastAutoTable.finalY + 10;
+  const priceHeight = setPrice(orderPdf, values, hebrew, english, finalY);
+  const declarationHeight = setDeclerations(
+    orderPdf,
+    values,
+    hebrew,
+    english,
+    priceHeight
+  );
+  setSignature(orderPdf, values, hebrew, english, declarationHeight);
+  // autoTable(orderPdf, table);
+  // orderPdf.autoTable(table);
   // if (setBottomContent) {
   //   setBottomContent(doc, bottomContentRecord, setHeader, headerRecord, intl);
   // }
   // return doc;
 
-  const headerHeight = setHeader(orderPdf, values, hebrew, english);
   const productTableHeight = setProductTable(
     orderPdf,
     values,
@@ -165,10 +239,7 @@ const getOrderPdf = (values, hebrew, english) => {
     english
   );
 
-  console.log(headerHeight);
   window.open(orderPdf.output("bloburl"), "_blank");
-
-  console.log(values);
 };
 
 const getLocalPhoneNumber = (phone) => {
@@ -201,28 +272,26 @@ const setEnHeItem = (doc, Hloc, vLoc, content, align) => {
 };
 export { getFormItemVaidation, getOrderPdf };
 
+export const setTitle = (doc, values, hebrew, english, height) => {
+  const margins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+  const orderId = 5342543534543;
+  const title = `הזמנה מספר: ${orderId.toString()}`;
+  var currentHeight = height;
+  doc.setFontSize(pdfConfig.headerTextSize);
+  doc.setTextColor(colorBlack);
+  doc.setR2L(true);
+  doc.setFont("Rubik", "normal"); // set font
+  doc.text(rightMargin, currentHeight, title, "right");
+  currentHeight += 5;
+  return currentHeight;
+};
+
 export const setHeader = (doc, values, hebrew, english) => {
   const margins = getPdfMargins(doc);
   const rightMargin = doc.internal.pageSize.getWidth() - margins;
-
-  var pdfConfig = {
-    headerTextSize: 20,
-    labelTextSize: 12,
-    fieldTextSize: 10,
-    lineHeight: 6,
-    subLineHeight: 4,
-  };
   var currentHeight = 20;
-
-  var colorBlack = "#000000";
-  var colorGray = "#4d4e53";
-  const organizationName = "שם הארגון";
   const phone = values.phone ? getLocalPhoneNumber(values.phone) : null;
-  // const mobile =
-  //   record.branch && record.branch.mobile_number
-  //     ? getLocalPhoneNumber(record.branch.mobile_number)
-  //     : null;
-  // const address = getAddress(values);
   const header = {
     firmEn: "Watchmarks Ltd",
     firmHe: "ווטשמרקס בע״מ",
@@ -235,7 +304,8 @@ export const setHeader = (doc, values, hebrew, english) => {
     toHe: "לכבוד:",
   };
   const address = [values.city, values.street, values.house_number].join(", ");
-
+  const orderId = 5342543534543;
+  const orderNumber = `הזמנה מספר: ${orderId.toString()}`;
   const from = `ווטשמרקס בע״מ`;
   const title = `טופס הזמנה`;
   const phoneText = phone ? `טלפון: ${phone}` : ``;
@@ -271,8 +341,16 @@ export const setHeader = (doc, values, hebrew, english) => {
 
   currentHeight += pdfConfig.subLineHeight;
   doc.line(margins, currentHeight, rightMargin, currentHeight);
+  currentHeight += pdfConfig.titleLineHeight;
 
-  currentHeight += pdfConfig.subLineHeight;
+  doc.setFontSize(pdfConfig.headerTextSize);
+  doc.setTextColor(colorBlack);
+  doc.setR2L(true);
+  doc.setFont("Rubik", "normal"); // set font
+  doc.text(rightMargin, currentHeight, orderNumber, "right");
+  doc.setFontSize(pdfConfig.fieldTextSize);
+  doc.setTextColor(colorGray);
+  currentHeight += pdfConfig.subLineHeight + 2;
   doc.setR2L(false);
   doc.text(margins, currentHeight, header.toEn, "left");
   doc.setR2L(true);
@@ -301,6 +379,123 @@ export const setHeader = (doc, values, hebrew, english) => {
   doc.text(rightMargin, currentHeight, values.email, "right");
   currentHeight += pdfConfig.subLineHeight;
 
+  return currentHeight;
+};
+
+export const setPrice = (doc, values, hebrew, english, height) => {
+  const margins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+
+  var currentHeight = height;
+
+  const tempSumHe = `סכום ביניים`;
+  const deliveryHe = `משלוח`;
+  const vatHe = `מע״מ`;
+  const totalSumHe = `סה״כ לתשלום`;
+
+  const tempSumEn = `Items sum`;
+  const deliveryEn = `Delivery`;
+  const vatEn = `Vat`;
+  const totalSumEn = `Total sum`;
+  doc.setR2L(true);
+  doc.setFontSize(pdfConfig.fieldTextSize);
+  doc.setTextColor(colorBlack);
+  const totalPrice = new Intl.NumberFormat("he", {
+    style: "currency",
+    currency: "ILS",
+    maximumFractionDigits: 2,
+  }).format(values.price);
+
+  const vatPrice = new Intl.NumberFormat("he", {
+    style: "currency",
+    currency: "ILS",
+    maximumFractionDigits: 2,
+  }).format((values.price / 1.17) * 0.17);
+
+  const deliveryPrice = new Intl.NumberFormat("he", {
+    style: "currency",
+    currency: "ILS",
+    maximumFractionDigits: 2,
+  }).format(0);
+
+  const tempPrice = new Intl.NumberFormat("he", {
+    style: "currency",
+    currency: "ILS",
+    maximumFractionDigits: 2,
+  }).format(values.price / 1.17);
+  doc.text(margins, currentHeight, tempPrice, "left");
+  setEnHeItem(doc, margins + 50, currentHeight, tempSumHe, "right");
+  currentHeight += 5;
+  doc.text(margins, currentHeight, deliveryPrice, "left");
+  setEnHeItem(doc, margins + 50, currentHeight, deliveryHe, "right");
+  currentHeight += 5;
+  doc.text(margins, currentHeight, vatPrice, "left");
+  setEnHeItem(doc, margins + 50, currentHeight, vatHe, "right");
+  currentHeight += 5;
+  doc.setFont("Rubik", "bold"); // set font
+  doc.text(margins, currentHeight, totalPrice, "left");
+  setEnHeItem(doc, margins + 50, currentHeight, totalSumHe, "right");
+  doc.setFont("Rubik", "normal"); // set font
+  currentHeight += 5;
+  return currentHeight;
+};
+
+export const setDeclerations = (doc, values, hebrew, english, height) => {
+  const margins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+  const bottomHeight = doc.internal.pageSize.getHeight() - margins - 30;
+  var currentHeight = bottomHeight;
+  const declarationHe1 =
+    "אני מאשר/ת בחתימתי מטה את ההזמנה המפורטת להלן, לרבות המאפיינים השונים, הכמויות והמחירים המפורטים.";
+  const declarationHe2 =
+    "אני מאשר/ת שההזמנה אינה מצויה במלאי החברה ותיוצר אך ורק עבורי עם מאפיינים ייחודיים שנבחרו על ידי ולכן לא ניתן לבטל את הרכישה לאחר ביצועה.";
+  doc.setR2L(true);
+  doc.setFontSize(pdfConfig.declerationTextSize);
+  doc.setTextColor(colorGray);
+  setEnHeItem(doc, rightMargin, currentHeight, declarationHe1, "right");
+  currentHeight += 4;
+  setEnHeItem(doc, rightMargin, currentHeight, declarationHe2, "right");
+  currentHeight += 10;
+  return currentHeight;
+};
+
+export const setSignature = (doc, values, hebrew, english, height) => {
+  const margins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+  var currentHeight = height;
+  const nameHe = "שם המזמין";
+  const nameEn = "Orderer name";
+  const signatureHe = "חתימה";
+  const signatureEn = "Signature";
+  const dateHe = "תאריך";
+  const dateEn = "Date";
+  const declarationHe1 =
+    "אני מאשר/ת בחתימתי מטה את ההזמנה המפורטת להלן, לרבות המאפיינים השונים, הכמויות והמחירים המפורטים.";
+  const declarationHe2 =
+    "אני מאשר/ת שההזמנה אינה מצויה במלאי החברה ותיוצר אך ורק עבורי עם מאפיינים ייחודיים שנבחרו על ידי ולכן לא ניתן לבטל את הרכישה לאחר ביצועה.";
+  doc.setR2L(true);
+  doc.setFontSize(pdfConfig.fieldTextSize);
+  doc.setTextColor(colorGray);
+  setEnHeItem(doc, rightMargin, currentHeight, nameHe, "right");
+  setEnHeItem(doc, rightMargin - 50, currentHeight, signatureHe, "right");
+  setEnHeItem(doc, rightMargin - 100, currentHeight, dateHe, "right");
+  currentHeight += 4;
+  doc.setFont("Rubik", "bold"); // set font
+  setEnHeItem(doc, rightMargin, currentHeight, values.business_name, "right");
+  setEnHeItem(doc, rightMargin - 50, currentHeight, "", "right");
+  // doc.line(margins, currentHeight, rightMargin, currentHeight);
+
+  setEnHeItem(
+    doc,
+    rightMargin - 100,
+    currentHeight,
+    moment().format("MM/DD/YYYY"),
+    "right"
+  );
+
+  // currentHeight += 4;
+  // setEnHeItem(doc, rightMargin, currentHeight, declarationHe2, "right");
+  // currentHeight += 4;
   return currentHeight;
 };
 

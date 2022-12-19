@@ -23,11 +23,11 @@ const RadioButtonItem = (props) => {
     if (frame) {
       list = [
         {
-          id: true,
+          id: "withFrame",
           name: "עם מסגרת",
         },
         {
-          id: false,
+          id: "noFrame",
           name: "ללא מסגרת",
         },
       ];
@@ -38,7 +38,7 @@ const RadioButtonItem = (props) => {
           name: "ישרות",
         },
         {
-          id: "round",
+          id: "rounded",
           name: "מעוגלות",
         },
       ];

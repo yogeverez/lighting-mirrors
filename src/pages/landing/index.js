@@ -34,7 +34,7 @@ const Landing = () => {
       width: "40CM",
       height: "40CM",
       shape: "rectangle",
-      frame: true,
+      frame: "withFrame",
       lighting: "back",
       style: "JY-S002",
       technology: [
@@ -59,8 +59,9 @@ const Landing = () => {
       phone: "+972508698824",
       email: "yogeverez@gmail.com",
       delivery_notes: "אין הערות",
-      corners: "straight",
+      corners: "rounded",
       "frame-color": "black",
+      price: 2500,
     };
 
     const english = true;
