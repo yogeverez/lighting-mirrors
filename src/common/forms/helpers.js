@@ -87,10 +87,14 @@ const getPdfMargins = (doc) => {
   return 40 / doc.internal.scaleFactor;
 };
 
-const getAutoTableData = (data) => {
+const getAutoTableData = (data, language) => {
   let columns = [];
   if (data[0]) {
-    Object.keys(data[0]).forEach((key) =>
+    const items =
+      language === "hebrew"
+        ? Object.keys(data[0])
+        : Object.keys(data[0]).reverse();
+    items.forEach((key) =>
       columns.push({
         header: key,
         dataKey: key,
@@ -110,8 +114,8 @@ const getAutoTableData = (data) => {
   };
 };
 
-const getHebrewData = (values) => {
-  const columns = {
+const getOrderTableData = (values, language) => {
+  const hebrewColumns = {
     frame: "מסגרת",
     "frame-color": "צבע מסגרת",
     height: "גובה",
@@ -122,7 +126,7 @@ const getHebrewData = (values) => {
     technology: "טכנולוגייה",
     price: "עלות",
   };
-  const dic = {
+  const hebrewDic = {
     withFrame: "עם מסגרת",
     noFrame: "ללא מסגרת",
     straight: "ישרות",
@@ -141,6 +145,40 @@ const getHebrewData = (values) => {
     Bluetooth: "התקן בלוטוס",
     "Three color lights": "שלושה סוגי תאורה",
   };
+
+  const englishColumns = {
+    frame: "Frame",
+    "frame-color": "Frame color",
+    height: "Height",
+    width: "Width",
+    lighting: "Lightning",
+    quantity: "Quantity",
+    shape: "Shape",
+    technology: "Technology",
+    price: "Price",
+  };
+  const englishDic = {
+    withFrame: "With frame",
+    noFrame: "No frame",
+    straight: "Sraight",
+    rounded: "Rounded",
+    back: "Backlit",
+    front: "Front light",
+    rectangle: "Rectangle",
+    round: "Round",
+    elipse: "Elipse",
+    black: "Black",
+    gold: "Gold",
+    "Brightness control": "Brightness control",
+    "Intelligent defogging": "Intelligent defogging",
+    "Human-body induction": "Human-body induction",
+    "Time / Temperature display": "Time / Temperature display",
+    Bluetooth: "Bluetooth",
+    "Three color lights": "Three color lights",
+  };
+
+  const columns = language === "hebrew" ? hebrewColumns : englishColumns;
+  const dic = language === "hebrew" ? hebrewDic : englishDic;
 
   let data = [
     {
@@ -161,28 +199,53 @@ const getHebrewData = (values) => {
   return data;
 };
 
-const getOrderPdf = (values, hebrew, english) => {
-  let orderPdf = new jsPDF({ orientation: "p" });
-  const tableData = getHebrewData(values);
-  // orderPdf.setR2L(true);
-  const headerHeight = setHeader(orderPdf, values, hebrew, english);
-  // const titleHeight = setTitle(orderPdf, values, hebrew, english, headerHeight);
+const loadImage = (src) => {
+  return new Promise((resolve, reject) => {
+    let img = new Image();
+    img.src = src;
+    img.onload = () => resolve(img);
+    img.onerror = (err) => {
+      resolve(null);
+    };
+  });
+};
 
-  let columnStyles = {
-    0: { cellWidth: 12, fillColor: [255, 255, 255] },
-    1: { cellWidth: 9, fillColor: [255, 255, 255] },
-    2: { cellWidth: 60, fillColor: [255, 255, 255] },
-    3: { cellWidth: 15, fillColor: [255, 255, 255] },
-    4: { cellWidth: 22, fillColor: [255, 255, 255] },
-    5: { cellWidth: 20, fillColor: [255, 255, 255] },
-    6: { cellWidth: 15, fillColor: [255, 255, 255] },
-    7: { cellWidth: 15, fillColor: [255, 255, 255] },
-  };
+const getOrderPdf = async (values, language) => {
+  const src =
+    "https://i0.wp.com/father4justice.org/wp-content/uploads/2021/02/signature.png?ssl=1";
+  const signature = await loadImage(src);
+
+  let orderPdf = new jsPDF({ orientation: "p" });
+  const tableData = getOrderTableData(values, language);
+  const headerHeight = setHeader(orderPdf, values, language);
+  let columnStyles =
+    language === "hebrew"
+      ? {
+          0: { cellWidth: 12, fillColor: [255, 255, 255] },
+          1: { cellWidth: 9, fillColor: [255, 255, 255] },
+          2: { cellWidth: 62.5, fillColor: [255, 255, 255] },
+          3: { cellWidth: 15, fillColor: [255, 255, 255] },
+          4: { cellWidth: 22, fillColor: [255, 255, 255] },
+          5: { cellWidth: 20, fillColor: [255, 255, 255] },
+          6: { cellWidth: 15, fillColor: [255, 255, 255] },
+          7: { cellWidth: 13, fillColor: [255, 255, 255] },
+          8: { cellWidth: 13, fillColor: [255, 255, 255] },
+        }
+      : {
+          8: { cellWidth: 12, fillColor: [255, 255, 255] },
+          7: { cellWidth: 15, fillColor: [255, 255, 255] },
+          6: { cellWidth: 57, fillColor: [255, 255, 255] },
+          5: { cellWidth: 18, fillColor: [255, 255, 255] },
+          4: { cellWidth: 22, fillColor: [255, 255, 255] },
+          3: { cellWidth: 20, fillColor: [255, 255, 255] },
+          2: { cellWidth: 15, fillColor: [255, 255, 255] },
+          1: { cellWidth: 12, fillColor: [255, 255, 255] },
+          0: { cellWidth: 12, fillColor: [255, 255, 255] },
+        };
   const table = {
-    ...getAutoTableData(tableData),
+    ...getAutoTableData(tableData, language),
     didDrawPage: function (data) {
       // Top content
-      // setProductTable(orderPdf, values, headerHeight, hebrew, english);
     },
     didParseCell: function (data) {
       const isHebrew = (text) => {
@@ -192,13 +255,11 @@ const getOrderPdf = (values, hebrew, english) => {
         data.cell.text = data.cell.text[0].split("").reverse().join("");
       }
     },
-
-    // ...rest,
     columnStyles,
     styles: {
       fontSize: 9,
       font: "Rubik",
-      halign: "right",
+      halign: language === "hebrew" ? "right" : "left",
       // cellWidth: "wrap",
       overflow: "linebreak",
       lineColor: [40],
@@ -215,51 +276,16 @@ const getOrderPdf = (values, hebrew, english) => {
   orderPdf.autoTable(table);
 
   let finalY = orderPdf.lastAutoTable.finalY + 10;
-  const priceHeight = setPrice(orderPdf, values, hebrew, english, finalY);
+  const priceHeight = setPrice(orderPdf, values, language, finalY);
   const declarationHeight = setDeclerations(
     orderPdf,
     values,
-    hebrew,
-    english,
+    language,
     priceHeight
   );
-  setSignature(orderPdf, values, hebrew, english, declarationHeight);
-  // autoTable(orderPdf, table);
-  // orderPdf.autoTable(table);
-  // if (setBottomContent) {
-  //   setBottomContent(doc, bottomContentRecord, setHeader, headerRecord, intl);
-  // }
-  // return doc;
-
-  const productTableHeight = setProductTable(
-    orderPdf,
-    values,
-    headerHeight,
-    hebrew,
-    english
-  );
+  setSignature(orderPdf, values, language, declarationHeight, signature);
 
   window.open(orderPdf.output("bloburl"), "_blank");
-};
-
-const getLocalPhoneNumber = (phone) => {
-  const phoneNumber = phone ? parsePhoneNumberFromString(phone) : null;
-  if (phoneNumber) {
-    return phoneNumber.formatNational();
-  }
-  return phone;
-};
-
-const getAddress = (record) => {
-  const street =
-    record && record.street !== undefined
-      ? record.street.trim() + " " + record.house_number
-      : "";
-  const address =
-    record && record.city !== undefined
-      ? record.city.trim() + ", " + street
-      : street;
-  return address;
 };
 
 const isHebrew = (text) => {
@@ -272,7 +298,7 @@ const setEnHeItem = (doc, Hloc, vLoc, content, align) => {
 };
 export { getFormItemVaidation, getOrderPdf };
 
-export const setTitle = (doc, values, hebrew, english, height) => {
+export const setTitle = (doc, values, language, height) => {
   const margins = getPdfMargins(doc);
   const rightMargin = doc.internal.pageSize.getWidth() - margins;
   const orderId = 5342543534543;
@@ -287,11 +313,10 @@ export const setTitle = (doc, values, hebrew, english, height) => {
   return currentHeight;
 };
 
-export const setHeader = (doc, values, hebrew, english) => {
-  const margins = getPdfMargins(doc);
-  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+export const setHeader = (doc, values, language) => {
+  const leftMargins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - leftMargins;
   var currentHeight = 20;
-  const phone = values.phone ? getLocalPhoneNumber(values.phone) : null;
   const header = {
     firmEn: "Watchmarks Ltd",
     firmHe: "ווטשמרקס בע״מ",
@@ -305,16 +330,16 @@ export const setHeader = (doc, values, hebrew, english) => {
   };
   const address = [values.city, values.street, values.house_number].join(", ");
   const orderId = 5342543534543;
-  const orderNumber = `הזמנה מספר: ${orderId.toString()}`;
-  const from = `ווטשמרקס בע״מ`;
-  const title = `טופס הזמנה`;
-  const phoneText = phone ? `טלפון: ${phone}` : ``;
-  // const mobileText = mobile ? `סלולארי: ${mobile}` : ``;
-  const addressText = address ? `כתובת: ${address}` : ``;
-
+  const orderNumber =
+    language === "hebrew"
+      ? `הזמנה מספר: ${orderId.toString()}`
+      : `Order number: ${orderId.toString()}`;
+  const direction = language === "hebrew" ? "right" : "left";
+  const headerTo = language === "hebrew" ? header.toHe : header.toEn;
+  const margins = language === "hebrew" ? rightMargin : leftMargins;
   doc.setFontSize(pdfConfig.headerTextSize);
   doc.setTextColor(colorBlack);
-  doc.text(margins, currentHeight, header.firmEn, "left");
+  doc.text(leftMargins, currentHeight, header.firmEn, "left");
   doc.setR2L(true);
   doc.setFont("Rubik", "normal"); // set font
   doc.text(rightMargin, currentHeight, header.firmHe, "right");
@@ -322,146 +347,159 @@ export const setHeader = (doc, values, hebrew, english) => {
   doc.setTextColor(colorGray);
   currentHeight += 5;
   doc.setR2L(false);
-  doc.text(margins, currentHeight, header.addressEn, "left");
+  doc.text(leftMargins, currentHeight, header.addressEn, "left");
   doc.setR2L(true);
   doc.text(rightMargin, currentHeight, header.addressHe, "right");
-
   currentHeight += pdfConfig.subLineHeight;
   doc.setR2L(false);
-  doc.text(margins, currentHeight, header.phone, "left");
+  doc.text(leftMargins, currentHeight, header.phone, "left");
   doc.text(rightMargin, currentHeight, header.phone, "right");
-
   currentHeight += pdfConfig.subLineHeight;
-  doc.text(margins, currentHeight, header.email, "left");
+  doc.text(leftMargins, currentHeight, header.email, "left");
   doc.text(rightMargin, currentHeight, header.email, "right");
-
   currentHeight += pdfConfig.subLineHeight;
-  doc.text(margins, currentHeight, header.website, "left");
+  doc.text(leftMargins, currentHeight, header.website, "left");
   doc.text(rightMargin, currentHeight, header.website, "right");
-
   currentHeight += pdfConfig.subLineHeight;
-  doc.line(margins, currentHeight, rightMargin, currentHeight);
+  doc.line(leftMargins, currentHeight, rightMargin, currentHeight);
   currentHeight += pdfConfig.titleLineHeight;
-
   doc.setFontSize(pdfConfig.headerTextSize);
   doc.setTextColor(colorBlack);
   doc.setR2L(true);
   doc.setFont("Rubik", "normal"); // set font
-  doc.text(rightMargin, currentHeight, orderNumber, "right");
+  setEnHeItem(doc, margins, currentHeight, orderNumber, direction);
   doc.setFontSize(pdfConfig.fieldTextSize);
   doc.setTextColor(colorGray);
   currentHeight += pdfConfig.subLineHeight + 2;
-  doc.setR2L(false);
-  doc.text(margins, currentHeight, header.toEn, "left");
-  doc.setR2L(true);
-  doc.text(rightMargin, currentHeight, header.toHe, "right");
-
+  doc.setR2L(language === "hebrew");
+  doc.text(margins, currentHeight, headerTo, direction);
   currentHeight += pdfConfig.subLineHeight;
-  doc.setR2L(false);
-  setEnHeItem(doc, margins, currentHeight, values.business_name, "left");
-  doc.setR2L(true);
-  setEnHeItem(doc, rightMargin, currentHeight, values.business_name, "right");
-
+  setEnHeItem(doc, margins, currentHeight, values.business_name, direction);
   currentHeight += pdfConfig.subLineHeight;
-  doc.setR2L(false);
-  setEnHeItem(doc, margins, currentHeight, address, "left");
-  doc.setR2L(true);
-  setEnHeItem(doc, rightMargin, currentHeight, address, "right");
-
-  doc.setR2L(false);
+  setEnHeItem(doc, margins, currentHeight, address, direction);
   currentHeight += pdfConfig.subLineHeight;
-  doc.setR2L(false);
-  doc.text(margins, currentHeight + 0.3, values.phone, "left");
-  doc.text(rightMargin, currentHeight + 0.3, values.phone, "right");
-
+  setEnHeItem(doc, margins, currentHeight + 0.3, values.phone, direction);
   currentHeight += pdfConfig.subLineHeight;
-  doc.text(margins, currentHeight, values.email, "left");
-  doc.text(rightMargin, currentHeight, values.email, "right");
+  setEnHeItem(doc, margins, currentHeight, values.email, direction);
   currentHeight += pdfConfig.subLineHeight;
-
   return currentHeight;
 };
 
-export const setPrice = (doc, values, hebrew, english, height) => {
-  const margins = getPdfMargins(doc);
-  const rightMargin = doc.internal.pageSize.getWidth() - margins;
-
+export const setPrice = (doc, values, language, height) => {
+  const leftMargins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - leftMargins;
+  const labelMargins =
+    language === "hebrew" ? leftMargins + 50 : rightMargin - 50;
+  const contentMargins = language === "hebrew" ? leftMargins : rightMargin - 20;
+  const direction = language === "hebrew" ? "right" : "left";
   var currentHeight = height;
-
   const tempSumHe = `סכום ביניים`;
   const deliveryHe = `משלוח`;
   const vatHe = `מע״מ`;
   const totalSumHe = `סה״כ לתשלום`;
-
   const tempSumEn = `Items sum`;
   const deliveryEn = `Delivery`;
   const vatEn = `Vat`;
   const totalSumEn = `Total sum`;
-  doc.setR2L(true);
+  const tempSum = language === "hebrew" ? tempSumHe : tempSumEn;
+  const delivery = language === "hebrew" ? deliveryHe : deliveryEn;
+  const vat = language === "hebrew" ? vatHe : vatEn;
+  const totalSum = language === "hebrew" ? totalSumHe : totalSumEn;
+  const locale = "he";
   doc.setFontSize(pdfConfig.fieldTextSize);
   doc.setTextColor(colorBlack);
-  const totalPrice = new Intl.NumberFormat("he", {
+  const totalPrice = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "ILS",
     maximumFractionDigits: 2,
   }).format(values.price);
-
-  const vatPrice = new Intl.NumberFormat("he", {
+  const vatPrice = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "ILS",
     maximumFractionDigits: 2,
   }).format((values.price / 1.17) * 0.17);
-
-  const deliveryPrice = new Intl.NumberFormat("he", {
+  const deliveryPrice = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "ILS",
     maximumFractionDigits: 2,
   }).format(0);
-
-  const tempPrice = new Intl.NumberFormat("he", {
+  const tempPrice = new Intl.NumberFormat(locale, {
     style: "currency",
     currency: "ILS",
     maximumFractionDigits: 2,
   }).format(values.price / 1.17);
-  doc.text(margins, currentHeight, tempPrice, "left");
-  setEnHeItem(doc, margins + 50, currentHeight, tempSumHe, "right");
+  doc.setR2L(true);
+  doc.text(contentMargins, currentHeight, tempPrice, "left");
+  setEnHeItem(doc, labelMargins, currentHeight, tempSum, direction);
   currentHeight += 5;
-  doc.text(margins, currentHeight, deliveryPrice, "left");
-  setEnHeItem(doc, margins + 50, currentHeight, deliveryHe, "right");
+  doc.setR2L(true);
+  doc.text(contentMargins, currentHeight, deliveryPrice, "left");
+  setEnHeItem(doc, labelMargins, currentHeight, delivery, direction);
   currentHeight += 5;
-  doc.text(margins, currentHeight, vatPrice, "left");
-  setEnHeItem(doc, margins + 50, currentHeight, vatHe, "right");
+  doc.setR2L(true);
+  doc.text(contentMargins, currentHeight, vatPrice, "left");
+  setEnHeItem(doc, labelMargins, currentHeight, vat, direction);
   currentHeight += 5;
+  doc.setR2L(true);
   doc.setFont("Rubik", "bold"); // set font
-  doc.text(margins, currentHeight, totalPrice, "left");
-  setEnHeItem(doc, margins + 50, currentHeight, totalSumHe, "right");
+  doc.text(contentMargins, currentHeight, totalPrice, "left");
+  setEnHeItem(doc, labelMargins, currentHeight, totalSum, direction);
   doc.setFont("Rubik", "normal"); // set font
   currentHeight += 5;
   return currentHeight;
 };
 
-export const setDeclerations = (doc, values, hebrew, english, height) => {
-  const margins = getPdfMargins(doc);
-  const rightMargin = doc.internal.pageSize.getWidth() - margins;
-  const bottomHeight = doc.internal.pageSize.getHeight() - margins - 30;
+export const setDeclerations = (doc, values, language, height) => {
+  const leftMargins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - leftMargins;
+  const direction = language === "hebrew" ? "right" : "left";
+  const margins = language === "hebrew" ? rightMargin : leftMargins;
+  const bottomHeight = doc.internal.pageSize.getHeight() - leftMargins - 30;
   var currentHeight = bottomHeight;
   const declarationHe1 =
-    "אני מאשר/ת בחתימתי מטה את ההזמנה המפורטת להלן, לרבות המאפיינים השונים, הכמויות והמחירים המפורטים.";
+    "אני מאשר/ת בחתימתי מטה את ההזמנה המפורטת לעיל, לרבות המאפיינים השונים, הכמויות והמחירים המפורטים.";
   const declarationHe2 =
     "אני מאשר/ת שההזמנה אינה מצויה במלאי החברה ותיוצר אך ורק עבורי עם מאפיינים ייחודיים שנבחרו על ידי ולכן לא ניתן לבטל את הרכישה לאחר ביצועה.";
-  doc.setR2L(true);
-  doc.setFontSize(pdfConfig.declerationTextSize);
-  doc.setTextColor(colorGray);
-  setEnHeItem(doc, rightMargin, currentHeight, declarationHe1, "right");
-  currentHeight += 4;
-  setEnHeItem(doc, rightMargin, currentHeight, declarationHe2, "right");
-  currentHeight += 10;
+  const declerationsEn1 =
+    "I confirm with my signature below the order detailed above, including the various characteristics, quantities and prices detailed.";
+  const declerationsEn2 =
+    "I confirm that I know that the order is not in the company's stock and will be produced exclusively for me with unique characteristics";
+  const declerationsEn3 =
+    "chosen by me, and therefore the purchase cannot be canceled after it has been made.";
+  if (language === "hebrew") {
+    doc.setR2L(true);
+    doc.setFontSize(pdfConfig.declerationTextSize);
+    doc.setTextColor(colorGray);
+    setEnHeItem(doc, margins, currentHeight, declarationHe1, direction);
+    currentHeight += 4;
+    setEnHeItem(doc, margins, currentHeight, declarationHe2, direction);
+    currentHeight += 10;
+  } else {
+    doc.setR2L(false);
+    doc.setFontSize(pdfConfig.declerationTextSize);
+    doc.setTextColor(colorGray);
+    setEnHeItem(doc, margins, currentHeight - 4, declerationsEn1, direction);
+    setEnHeItem(doc, margins, currentHeight, declerationsEn2, direction);
+    currentHeight += 4;
+    setEnHeItem(doc, margins, currentHeight, declerationsEn3, direction);
+    currentHeight += 10;
+  }
   return currentHeight;
 };
 
-export const setSignature = (doc, values, hebrew, english, height) => {
-  const margins = getPdfMargins(doc);
-  const rightMargin = doc.internal.pageSize.getWidth() - margins;
+export const setSignature = (doc, values, language, height, signatureImg) => {
+  const leftMargins = getPdfMargins(doc);
+  const rightMargin = doc.internal.pageSize.getWidth() - leftMargins;
+  const direction = language === "hebrew" ? "right" : "left";
+  const margins = language === "hebrew" ? rightMargin : leftMargins;
+  const secondMargin =
+    language === "hebrew" ? rightMargin - 50 : leftMargins + 50;
+  const thirdMargin =
+    language === "hebrew" ? rightMargin - 100 : leftMargins + 100;
+  const lineMargin =
+    language === "hebrew" ? thirdMargin + 10 : thirdMargin - 10;
+  const signatureMargin =
+    language === "hebrew" ? rightMargin - 90 : leftMargins + 50;
   var currentHeight = height;
   const nameHe = "שם המזמין";
   const nameEn = "Orderer name";
@@ -469,42 +507,41 @@ export const setSignature = (doc, values, hebrew, english, height) => {
   const signatureEn = "Signature";
   const dateHe = "תאריך";
   const dateEn = "Date";
-  const declarationHe1 =
-    "אני מאשר/ת בחתימתי מטה את ההזמנה המפורטת להלן, לרבות המאפיינים השונים, הכמויות והמחירים המפורטים.";
-  const declarationHe2 =
-    "אני מאשר/ת שההזמנה אינה מצויה במלאי החברה ותיוצר אך ורק עבורי עם מאפיינים ייחודיים שנבחרו על ידי ולכן לא ניתן לבטל את הרכישה לאחר ביצועה.";
+  const name = language === "hebrew" ? nameHe : nameEn;
+  const signature = language === "hebrew" ? signatureHe : signatureEn;
+  const date = language === "hebrew" ? dateHe : dateEn;
   doc.setR2L(true);
   doc.setFontSize(pdfConfig.fieldTextSize);
   doc.setTextColor(colorGray);
-  setEnHeItem(doc, rightMargin, currentHeight, nameHe, "right");
-  setEnHeItem(doc, rightMargin - 50, currentHeight, signatureHe, "right");
-  setEnHeItem(doc, rightMargin - 100, currentHeight, dateHe, "right");
-  currentHeight += 4;
+  setEnHeItem(doc, margins, currentHeight, name, direction);
+  setEnHeItem(doc, secondMargin, currentHeight, signature, direction);
+  setEnHeItem(doc, thirdMargin, currentHeight, date, direction);
+  currentHeight += 6;
   doc.setFont("Rubik", "bold"); // set font
-  setEnHeItem(doc, rightMargin, currentHeight, values.business_name, "right");
-  setEnHeItem(doc, rightMargin - 50, currentHeight, "", "right");
-  // doc.line(margins, currentHeight, rightMargin, currentHeight);
+  setEnHeItem(doc, margins, currentHeight, values.business_name, direction);
+  setEnHeItem(doc, secondMargin, currentHeight, "", direction);
 
+  const type = signatureImg.src.substring(
+    "data:image/".length,
+    signatureImg.src.indexOf(";base64")
+  );
+  doc.line(secondMargin, currentHeight, lineMargin, currentHeight);
+
+  doc.addImage(
+    signatureImg,
+    type,
+    signatureMargin,
+    currentHeight - 14,
+    (20 / signatureImg.height) * signatureImg.width,
+    20
+  );
+  // doc.line(margins, currentHeight, rightMargin, currentHeight);
   setEnHeItem(
     doc,
-    rightMargin - 100,
+    thirdMargin,
     currentHeight,
-    moment().format("MM/DD/YYYY"),
-    "right"
+    moment().format("DD/MM/YYYY, h:mm:ss"),
+    direction
   );
-
-  // currentHeight += 4;
-  // setEnHeItem(doc, rightMargin, currentHeight, declarationHe2, "right");
-  // currentHeight += 4;
   return currentHeight;
-};
-
-export const setProductTable = (
-  doc,
-  values,
-  initialHeight,
-  hebrew,
-  english
-) => {
-  return;
 };

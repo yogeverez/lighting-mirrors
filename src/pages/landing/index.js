@@ -64,18 +64,8 @@ const Landing = () => {
       price: 2500,
     };
 
-    const english = true;
-    const hebrew = true;
-    getOrderPdf(values, hebrew, english);
-
-    // const res = await Payments.getGreenInvoiceToken();
-
-    // // const res = await Payments.launchPaymentForm();
-    // const obj = JSON.parse(res);
-    // console.log(res);
-    // console.log(obj);
-
-    // setPaymentUrl(obj.url);
+    await getOrderPdf(values, "english");
+    await getOrderPdf(values, "hebrew");
   };
 
   return (
