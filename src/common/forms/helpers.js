@@ -3,7 +3,12 @@ import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import JYR004 from "../assets/image/mirrors/4.png";
 import autoTable from "jspdf-autotable";
 import { setPersistence } from "firebase/auth";
+import app from "../../../src/fbconfig";
+
 import moment from "moment";
+import { getStorage } from "firebase/storage";
+
+const storage = getStorage(app);
 
 var colorBlack = "#000000";
 var colorGray = "#4d4e53";
