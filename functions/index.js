@@ -2,7 +2,7 @@ import fetch from "cross-fetch";
 import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { getStorage, ref, uploadBytes } from "firebase-admin/storage";
+import { getStorage } from "firebase-admin/storage";
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -164,12 +164,24 @@ export const createOrderPdf = functions.firestore
     const orederNumber = orderId;
     var hebrewFile = hebrewPdf.output("blob");
     const hebrewFileName = `order-${orederNumber.toString()}-hebrew.pdf`;
-    const hebrewPdfRef = ref(storage, `orders/${hebrewFileName}`);
     var englishFile = englishPdf.output("blob");
     const englishFileName = `order-${orederNumber.toString()}-english.pdf`;
-    const englishPdfRef = ref(storage, `orders/${englishFileName}`);
-    await uploadBytes(hebrewPdfRef, hebrewFile);
-    await uploadBytes(englishPdfRef, englishFile);
+
+    const bucket = storage.bucket();
+
+    const hebrewOptions = {
+      destination: hebrewFileName,
+    };
+
+    const englishOptions = {
+      destination: englishFileName,
+    };
+
+    bucket.upload(hebrewFile, hebrewOptions);
+    bucket.upload(englishFile, englishOptions);
+
+    // await uploadBytes(hebrewPdfRef, hebrewFile);
+    // await uploadBytes(englishPdfRef, englishFile);
   });
 
 const getOrderPdf = async (values, language) => {
