@@ -1,12 +1,8 @@
 import jsPDF from "jspdf";
-import { parsePhoneNumberFromString } from "libphonenumber-js/max";
-import JYR004 from "../assets/image/mirrors/4.png";
 import autoTable from "jspdf-autotable";
-import { setPersistence } from "firebase/auth";
 import app from "../../../src/fbconfig";
-
 import moment from "moment";
-import { getStorage } from "firebase/storage";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 const storage = getStorage(app);
 
@@ -289,8 +285,21 @@ const getOrderPdf = async (values, language) => {
     priceHeight
   );
   setSignature(orderPdf, values, language, declarationHeight, signature);
+  const orederNumber = 534534534534;
+  var base64result = orderPdf.output("blob");
+  var pdf = orderPdf.output("blob");
 
-  window.open(orderPdf.output("bloburl"), "_blank");
+  var data = new FormData();
+  data.append("data", pdf);
+
+  // .substr(orderPdf.output("datauristring").indexOf(",") + 1);
+  const fileName = `order-${orederNumber.toString()}.pdf`;
+
+  const pdfRef = ref(storage, `orders/${fileName}`);
+  uploadBytes(pdfRef, pdf).then((snapshot) => {
+    console.log("Uploaded a blob or file!");
+  });
+  // window.open(orderPdf.output("bloburl"), "_blank");
 };
 
 const isHebrew = (text) => {

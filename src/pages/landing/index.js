@@ -65,7 +65,7 @@ const Landing = () => {
     };
 
     await getOrderPdf(values, "english");
-    await getOrderPdf(values, "hebrew");
+    // await getOrderPdf(values, "hebrew");
   };
 
   return (
