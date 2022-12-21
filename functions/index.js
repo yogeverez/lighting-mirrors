@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
-
+import * as fs from "fs";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import moment from "moment";
@@ -185,9 +185,9 @@ export const createOrderPdf = functions.firestore
   });
 
 const getOrderPdf = async (values, language) => {
-  const src =
-    "https://i0.wp.com/father4justice.org/wp-content/uploads/2021/02/signature.png?ssl=1";
-  const signature = await loadImage(src);
+  // const src =
+  //   "https://i0.wp.com/father4justice.org/wp-content/uploads/2021/02/signature.png?ssl=1";
+  // const signature = await loadImage(src);
 
   let orderPdf = new jsPDF({ orientation: "p" });
   const tableData = getOrderTableData(values, language);
@@ -257,7 +257,7 @@ const getOrderPdf = async (values, language) => {
     language,
     priceHeight
   );
-  setSignature(orderPdf, values, language, declarationHeight, signature);
+  setSignature(orderPdf, values, language, declarationHeight);
 
   return orderPdf;
   // window.open(orderPdf.output("bloburl"), "_blank");
@@ -265,14 +265,25 @@ const getOrderPdf = async (values, language) => {
 
 const loadImage = (src) => {
   return new Promise((resolve, reject) => {
-    let img = new Image();
-    img.src = src;
-    img.onload = () => resolve(img);
-    img.onerror = (err) => {
+    // var img = fs.readFileSync("imgdata").toString();
+    var imgData = fs.readFileSync(src).toString("base64");
+
+    // let img = new Image();
+    // img.src = src;
+    imgData.onload = () => resolve(imgData);
+    imgData.onerror = (err) => {
       resolve(null);
     };
   });
 };
+
+// const blobToBase64 = (blob) => {
+//   return new Promise((resolve, _) => {
+//     const reader = new FileReader();
+//     reader.onloadend = () => resolve(reader.result);
+//     reader.readAsDataURL(blob);
+//   });
+// };
 
 const getPdfMargins = (doc) => {
   return 40 / doc.internal.scaleFactor;
@@ -573,7 +584,7 @@ export const setDeclerations = (doc, values, language, height) => {
   return currentHeight;
 };
 
-export const setSignature = (doc, values, language, height, signatureImg) => {
+export const setSignature = (doc, values, language, height) => {
   const leftMargins = getPdfMargins(doc);
   const rightMargin = doc.internal.pageSize.getWidth() - leftMargins;
   const direction = language === "hebrew" ? "right" : "left";
@@ -606,16 +617,17 @@ export const setSignature = (doc, values, language, height, signatureImg) => {
   doc.setFont("Rubik", "bold"); // set font
   setEnHeItem(doc, margins, currentHeight, values.business_name, direction);
   setEnHeItem(doc, secondMargin, currentHeight, "", direction);
-
-  const type = signatureImg.src.substring(
-    "data:image/".length,
-    signatureImg.src.indexOf(";base64")
-  );
+  const signatureImg = values.signature;
+  // const type = signatureImg.substring(
+  //   "data:image/".length,
+  //   signatureImg.indexOf(";base64")
+  // );
+  // console.log(type);
   doc.line(secondMargin, currentHeight, lineMargin, currentHeight);
 
   doc.addImage(
     signatureImg,
-    type,
+    "png",
     signatureMargin,
     currentHeight - 14,
     (20 / signatureImg.height) * signatureImg.width,

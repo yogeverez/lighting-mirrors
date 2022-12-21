@@ -36,7 +36,7 @@ const OrderForm = (props) => {
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
     );
-    const order = await Auth.addOrder(values);
+    const order = await Auth.addOrder({ ...values, signature });
     const successUrl = `${window.location.origin}/transactionsuccess`;
     const failureUrl = `${window.location.origin}/transactionfailure`;
     console.log(order.id);

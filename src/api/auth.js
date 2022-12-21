@@ -31,9 +31,7 @@ class Auth {
   }
 
   async addOrder(order) {
-    // Add a new document with a generated id.
     const docRef = await addDoc(collection(db, "orders"), order);
-    console.log("Document written with ID: ", docRef.id);
     return docRef;
   }
 }
