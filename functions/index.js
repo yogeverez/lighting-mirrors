@@ -4,9 +4,10 @@ import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 import * as fs from "fs";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import moment from "moment";
+import sizeOf from "image-size";
 
 initializeApp(functions.config().firebase);
 const storage = getStorage(functions.config().firebase);
@@ -624,13 +625,15 @@ export const setSignature = (doc, values, language, height) => {
   // );
   // console.log(type);
   doc.line(secondMargin, currentHeight, lineMargin, currentHeight);
+  var img = Buffer.from(signatureImg.split(";base64,").pop(), "base64");
+  var dimensions = sizeOf(img);
 
   doc.addImage(
     signatureImg,
     "png",
     signatureMargin,
     currentHeight - 14,
-    (20 / signatureImg.height) * signatureImg.width,
+    (20 / dimensions.height) * dimensions.width,
     20
   );
   // doc.line(margins, currentHeight, rightMargin, currentHeight);
