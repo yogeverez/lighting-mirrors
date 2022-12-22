@@ -140,7 +140,31 @@ export const sendOrderPdf = functions.storage
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
-    const customMetadata = object.customMetadata;
+    const metadata = object.metadata;
+    const name = `${metadata.first_name} ${metadata.surename}`;
+    const mail = metadata.email;
+    const phone = metadata.phone;
+    const message = "new order...";
+    const keyRef = getFirestore().collection("emails");
 
-    functions.logger.log(customMetadata);
+    const newMail = {
+      name,
+      mail,
+      phone,
+      content: message,
+      to: `yogev@arazim.co, ${mail}`,
+      message: {
+        subject: "New order",
+        text: `${name} ${phone} ${message}`,
+      },
+      attachments: [
+        {
+          // use URL as an attachment
+          filename: "order.pdf",
+          path: object.mediaLink,
+        },
+      ],
+    };
+    await keyRef.add(newMail);
+    functions.logger.log(object);
   });
