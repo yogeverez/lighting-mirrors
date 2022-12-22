@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth } from "firebase/auth";
 import { collection, addDoc, getFirestore } from "firebase/firestore";
+import { getOrderPdf } from "../common/forms/helpers";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyD9IcDq5ly9gGMfV5pGUVmIhRgjWnz_Gx8",
@@ -17,6 +19,7 @@ export const firebaseConfig = {
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const auth = initializeAuth(app, {
   // persistence: browserSessionPersistence,
@@ -33,6 +36,40 @@ class Auth {
   async addOrder(order) {
     const docRef = await addDoc(collection(db, "orders"), order);
     return docRef;
+  }
+
+  async uploadOrderPdfs(values) {
+    const englishPdf = await getOrderPdf(values, "english");
+    const hebrewPdf = await getOrderPdf(values, "hebrew");
+    const englishFileName = `order-english.pdf`;
+    const englishPdfRef = ref(
+      storage,
+      `orders/${values.orderId}/${englishFileName}`
+    );
+    const hebrewFileName = `order-hebrew.pdf`;
+    const hebrewPdfRef = ref(
+      storage,
+      `orders/${values.orderId}/${hebrewFileName}`
+    );
+
+    const metadata = {
+      customMetadata: {
+        email: values.email,
+        business_name: values.business_name,
+        first_name: values.first_name,
+        surename: values.surename,
+        phone: values.phone,
+      },
+    };
+
+    await uploadBytes(englishPdfRef, englishPdf, metadata).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+
+    await uploadBytes(hebrewPdfRef, hebrewPdf, metadata).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+    return;
   }
 }
 

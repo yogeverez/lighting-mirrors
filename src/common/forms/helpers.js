@@ -3,6 +3,7 @@ import autoTable from "jspdf-autotable";
 import app from "../../../src/fbconfig";
 import moment from "moment";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { Loading3QuartersOutlined } from "@ant-design/icons";
 
 const storage = getStorage(app);
 
@@ -212,10 +213,7 @@ const loadImage = (src) => {
 };
 
 const getOrderPdf = async (values, language) => {
-  const src =
-    "https://i0.wp.com/father4justice.org/wp-content/uploads/2021/02/signature.png?ssl=1";
-  const signature = await loadImage(src);
-
+  const signature = await loadImage(values.signature);
   let orderPdf = new jsPDF({ orientation: "p" });
   const tableData = getOrderTableData(values, language);
   const headerHeight = setHeader(orderPdf, values, language);
@@ -285,20 +283,13 @@ const getOrderPdf = async (values, language) => {
     priceHeight
   );
   setSignature(orderPdf, values, language, declarationHeight, signature);
-  const orederNumber = 534534534534;
-  var base64result = orderPdf.output("blob");
   var pdf = orderPdf.output("blob");
-
-  var data = new FormData();
-  data.append("data", pdf);
-
-  // .substr(orderPdf.output("datauristring").indexOf(",") + 1);
-  const fileName = `order-${orederNumber.toString()}.pdf`;
-
-  const pdfRef = ref(storage, `orders/${fileName}`);
-  uploadBytes(pdfRef, pdf).then((snapshot) => {
-    console.log("Uploaded a blob or file!");
-  });
+  return pdf;
+  // const fileName = `order-${orederNumber.toString()}.pdf`;
+  // const pdfRef = ref(storage, `orders/${fileName}`);
+  // uploadBytes(pdfRef, pdf).then((snapshot) => {
+  //   console.log("Uploaded a blob or file!");
+  // });
   // window.open(orderPdf.output("bloburl"), "_blank");
 };
 
@@ -513,7 +504,7 @@ export const setSignature = (doc, values, language, height, signatureImg) => {
   const lineMargin =
     language === "hebrew" ? thirdMargin + 10 : thirdMargin - 10;
   const signatureMargin =
-    language === "hebrew" ? rightMargin - 90 : leftMargins + 50;
+    language === "hebrew" ? rightMargin - 93 : leftMargins + 50;
   var currentHeight = height;
   const nameHe = "שם המזמין";
   const nameEn = "Orderer name";
@@ -534,13 +525,10 @@ export const setSignature = (doc, values, language, height, signatureImg) => {
   doc.setFont("Rubik", "bold"); // set font
   setEnHeItem(doc, margins, currentHeight, values.business_name, direction);
   setEnHeItem(doc, secondMargin, currentHeight, "", direction);
-
   const type = signatureImg.src.substring(
     "data:image/".length,
     signatureImg.src.indexOf(";base64")
   );
-  doc.line(secondMargin, currentHeight, lineMargin, currentHeight);
-
   doc.addImage(
     signatureImg,
     type,
@@ -549,7 +537,7 @@ export const setSignature = (doc, values, language, height, signatureImg) => {
     (20 / signatureImg.height) * signatureImg.width,
     20
   );
-  // doc.line(margins, currentHeight, rightMargin, currentHeight);
+  doc.line(secondMargin, currentHeight, lineMargin, currentHeight);
   setEnHeItem(
     doc,
     thirdMargin,

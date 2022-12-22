@@ -36,13 +36,14 @@ const OrderForm = (props) => {
     Object.keys(values).forEach((key) =>
       values[key] === undefined ? delete values[key] : {}
     );
-    const order = await Auth.addOrder({ ...values, signature });
+    const finalValues = { ...values, signature, price: 2500 };
+    const order = await Auth.addOrder(finalValues);
+    await Auth.uploadOrderPdfs({ ...finalValues, orderId: order.id });
     const successUrl = `${window.location.origin}/transactionsuccess`;
     const failureUrl = `${window.location.origin}/transactionfailure`;
-    console.log(order.id);
     const url = await Payments.launchForm({
       ...values,
-      id: order.id.toString(),
+      id: order.id,
       successUrl,
       failureUrl,
     });
