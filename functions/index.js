@@ -2,6 +2,7 @@ import fetch from "cross-fetch";
 import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
+import { Storage } from "firebase-admin/storage";
 
 initializeApp(functions.config().firebase);
 
@@ -140,6 +141,16 @@ export const sendOrderPdf = functions.storage
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
+
+    // Get a v2 signed URL for the file
+    // const [url] = await storage
+    //   .bucket("lighting-mirrors-dev.appspot.com")
+    //   .file(filePath)
+    //   .getSignedUrl(options);
+    // // const storage = getStorage();
+    // // const link = await getDownloadURL(ref(storage, filePath));
+    // console.log(url);
+    const url = await generateSignedUrl(filePath);
     const agentMailsRef = getFirestore()
       .collection("config")
       .doc("agent_mails");
@@ -168,17 +179,34 @@ export const sendOrderPdf = functions.storage
           ? "New order from watchmarks"
           : `הזמנת מראה חתומה`,
         text: `${message}`,
+        attachments: [
+          {
+            // use URL as an attachment
+            filename: "order.pdf",
+            path: url,
+          },
+        ],
       },
-      attachments: [
-        {
-          // use URL as an attachment
-          filename: "order.pdf",
-          path: object.mediaLink,
-        },
-      ],
     };
     await keyRef.add(newMail);
     functions.logger.log(toMails);
-    functions.logger.log(ccMails);
+    functions.logger.log(url);
     functions.logger.log(object);
   });
+
+async function generateSignedUrl(fileName) {
+  // These options will allow temporary read access to the file
+  const storage = new Storage(functions.config().firebase);
+  const options = {
+    version: "v2", // defaults to 'v2' if missing.
+    action: "read",
+    expires: Date.now() + 1000 * 60 * 60 * 10000, // one hour * 100000
+  };
+
+  // Get a v2 signed URL for the file
+  const [url] = await storage
+    .bucket("lighting-mirrors-dev.appspot.com")
+    .file(fileName)
+    .getSignedUrl(options);
+  return url;
+}
