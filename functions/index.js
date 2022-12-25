@@ -140,22 +140,34 @@ export const sendOrderPdf = functions.storage
     const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
     const contentType = object.contentType; // File content type.
+    const agentMailsRef = getFirestore()
+      .collection("config")
+      .doc("agent_mails");
+    const agentData = await agentMailsRef.get();
+    const ccMailsRef = getFirestore().collection("config").doc("cc");
+    const ccData = await ccMailsRef.get();
+    const toMails = agentData.data().mails;
+    const ccMails = ccData.data().mails;
+
     const metadata = object.metadata;
     const name = `${metadata.first_name} ${metadata.surename}`;
     const mail = metadata.email;
     const phone = metadata.phone;
-    const message = "new order...";
-    const keyRef = getFirestore().collection("emails");
+    const message = `${name} שלום רב, מצורפת ההזמנה שנחתמה על ידך.`;
+    const keyRef = getFirestore().collection("mails");
 
     const newMail = {
       name,
       mail,
       phone,
       content: message,
-      to: `yogev@arazim.co, ${mail}`,
+      to: filePath.includes("english") ? toMails : mail,
+      cc: ccMails,
       message: {
-        subject: "New order",
-        text: `${name} ${phone} ${message}`,
+        subject: filePath.includes("english")
+          ? "New order from watchmarks"
+          : `הזמנת מראה חתומה`,
+        text: `${message}`,
       },
       attachments: [
         {
@@ -166,5 +178,7 @@ export const sendOrderPdf = functions.storage
       ],
     };
     await keyRef.add(newMail);
+    functions.logger.log(toMails);
+    functions.logger.log(ccMails);
     functions.logger.log(object);
   });
