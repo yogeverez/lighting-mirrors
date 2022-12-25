@@ -2,7 +2,10 @@ import fetch from "cross-fetch";
 import * as functions from "firebase-functions";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
-import { Storage } from "firebase-admin/storage";
+import { Storage } from "@google-cloud/storage";
+import { defineSecret } from "firebase-functions/params";
+
+const firebaseServiceAccount = defineSecret("firebase_service_account");
 
 initializeApp(functions.config().firebase);
 
@@ -135,22 +138,12 @@ export const getapikeydetails = functions.https.onCall(
   }
 );
 
-export const sendOrderPdf = functions.storage
-  .object()
+export const sendOrderPdf = functions
+  .runWith({ secrets: [firebaseServiceAccount] })
+  .storage.object()
   .onFinalize(async (object) => {
-    const fileBucket = object.bucket; // The Storage bucket that contains the file.
     const filePath = object.name; // File path in the bucket.
-    const contentType = object.contentType; // File content type.
-
-    // Get a v2 signed URL for the file
-    // const [url] = await storage
-    //   .bucket("lighting-mirrors-dev.appspot.com")
-    //   .file(filePath)
-    //   .getSignedUrl(options);
-    // // const storage = getStorage();
-    // // const link = await getDownloadURL(ref(storage, filePath));
-    // console.log(url);
-    const url = await generateSignedUrl(filePath);
+    const url = await generateSignedUrl(firebaseServiceAccount, filePath);
     const agentMailsRef = getFirestore()
       .collection("config")
       .doc("agent_mails");
@@ -159,14 +152,12 @@ export const sendOrderPdf = functions.storage
     const ccData = await ccMailsRef.get();
     const toMails = agentData.data().mails;
     const ccMails = ccData.data().mails;
-
     const metadata = object.metadata;
     const name = `${metadata.first_name} ${metadata.surename}`;
     const mail = metadata.email;
     const phone = metadata.phone;
     const message = `${name} שלום רב, מצורפת ההזמנה שנחתמה על ידך.`;
     const keyRef = getFirestore().collection("mails");
-
     const newMail = {
       name,
       mail,
@@ -189,20 +180,18 @@ export const sendOrderPdf = functions.storage
       },
     };
     await keyRef.add(newMail);
-    functions.logger.log(toMails);
-    functions.logger.log(url);
-    functions.logger.log(object);
   });
 
-async function generateSignedUrl(fileName) {
-  // These options will allow temporary read access to the file
-  const storage = new Storage(functions.config().firebase);
+async function generateSignedUrl(firebaseServiceAccount, fileName) {
+  const storage = new Storage({
+    projectId: JSON.parse(process.env.FIREBASE_CONFIG).projectId,
+    credentials: JSON.parse(firebaseServiceAccount.value()), // (or just a raw JS object)
+  });
   const options = {
     version: "v2", // defaults to 'v2' if missing.
     action: "read",
     expires: Date.now() + 1000 * 60 * 60 * 10000, // one hour * 100000
   };
-
   // Get a v2 signed URL for the file
   const [url] = await storage
     .bucket("lighting-mirrors-dev.appspot.com")
