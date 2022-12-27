@@ -2,7 +2,13 @@ import app from "../fbconfig";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { initializeAuth } from "firebase/auth";
-import { collection, addDoc, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getFirestore,
+  runTransaction,
+  doc,
+} from "firebase/firestore";
 import { getOrderPdf } from "../common/forms/helpers";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -36,6 +42,25 @@ class Auth {
   async addOrder(order) {
     const docRef = await addDoc(collection(db, "orders"), order);
     return docRef;
+  }
+
+  async updateOrderAfterPayment(orderId, requestId, status) {
+    const docRef = doc(db, "orders", orderId);
+    try {
+      await runTransaction(db, async (transaction) => {
+        const sfDoc = await transaction.get(docRef);
+        if (!sfDoc.exists()) {
+          throw "Document does not exist!";
+        }
+        const paymentStatus = status;
+        const paymentRequestId = requestId;
+
+        transaction.update(docRef, { paymentStatus, paymentRequestId });
+      });
+      console.log("Transaction successfully committed!");
+    } catch (e) {
+      console.log("Transaction failed: ", e);
+    }
   }
 
   async uploadOrderPdfs(values) {

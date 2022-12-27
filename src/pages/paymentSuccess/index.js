@@ -1,16 +1,16 @@
 import React, { Fragment, useEffect } from "react";
 import { Button, Result } from "antd";
 import { Link, useParams } from "react-router-dom";
+import Auth from "../../api/auth";
 
 const PaymentSuccess = () => {
-  // const { requestId } = useParams();
-  // console.log(requestId);
-  // console.log(window.location);
   let params = new URL(document.location).searchParams;
-  let requestId = params.get("requestId"); // is the string "Jonathan Smith".
-  // let age = parseInt(params.get('age')); // is the number 18
+  let requestId = params.get("requestId");
+  let orderId = params.get("orderId");
 
-  console.log(requestId);
+  useEffect(() => {
+    Auth.updateOrderAfterPayment(orderId, requestId, "success");
+  }, [orderId, requestId]);
 
   return (
     <div>

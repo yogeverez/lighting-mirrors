@@ -44,21 +44,10 @@ class Payments {
       const sanitizedMessage = data.text;
       console.log(sanitizedMessage);
     });
-
-    // try {
-    //   var response = await fetch(this.prox3 + url, requestOptions);
-    //   const result = await response.text();
-    //   return result;
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 
   async launchForm(values) {
-    console.log(values);
     const result = await getpaymenturl({ envirovment: "development", values });
-    console.log(result);
-
     const data = result.data;
     const obj = JSON.parse(data);
     return obj.url;

@@ -66,8 +66,8 @@ const OrderForm = (props) => {
   };
 
   const onConfirm = async (values) => {
-    const successUrl = `${window.location.origin}/transactionsuccess`;
-    const failureUrl = `${window.location.origin}/transactionfailure`;
+    const successUrl = `${window.location.origin}/transactionsuccess?orderId=values.orderId`;
+    const failureUrl = `${window.location.origin}/transactionfailure?orderId=values.orderId`;
     const url = await Payments.launchForm({
       ...values,
       id: values.orderId,
