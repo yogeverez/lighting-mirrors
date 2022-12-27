@@ -55,7 +55,10 @@ class Payments {
   }
 
   async launchForm(values) {
+    console.log(values);
     const result = await getpaymenturl({ envirovment: "development", values });
+    console.log(result);
+
     const data = result.data;
     const obj = JSON.parse(data);
     return obj.url;

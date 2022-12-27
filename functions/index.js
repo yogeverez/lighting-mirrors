@@ -52,6 +52,7 @@ const getGreenInvoiceToken = async (envirovment) => {
 export const getpaymenturl = functions.https.onCall(async (data, context) => {
   const res = await getGreenInvoiceToken(data.envirovment);
   const obj = JSON.parse(res);
+  functions.logger.log(obj);
 
   var url =
     data.envirovment === "development"
@@ -102,8 +103,9 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     //   notifyUrl: "http://localhost:3000",
     custom: values.id,
   };
-
+  functions.logger.log(orderDetails);
   var raw = JSON.stringify(orderDetails);
+  functions.logger.log(raw);
 
   var requestOptions = {
     method: "POST",
@@ -117,7 +119,11 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
 
   try {
     var response = await fetch(url, requestOptions);
+    functions.logger.log(response);
+
     const result = await response.text();
+    functions.logger.log(result);
+
     return result;
   } catch (error) {
     console.error(error);

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Form } from "antd";
+import { Form, Modal } from "antd";
 import Auth from "../../api/auth";
 import FormSteps from "./FormSteps";
 import Payments from "../../api/payments";
 import { useNavigate } from "react-router-dom";
+import { CheckCircleOutlined } from "@ant-design/icons";
 
 const OrderForm = (props) => {
   const { onChange, values } = props;
@@ -11,6 +12,7 @@ const OrderForm = (props) => {
   const [loading, setLoading] = useState(false);
   const [signature, setSignature] = useState(null);
   const [paymentUrl, setPaymentUrl] = useState(null);
+  const [modal, contextHolder] = Modal.useModal();
 
   const navigate = useNavigate();
 
@@ -39,36 +41,63 @@ const OrderForm = (props) => {
     const finalValues = { ...values, signature, price: 2500 };
     const order = await Auth.addOrder(finalValues);
     await Auth.uploadOrderPdfs({ ...finalValues, orderId: order.id });
+    setLoading(false);
+
+    modal.confirm({
+      title: "נוצרה הזמנה חדשה",
+      icon: <CheckCircleOutlined />,
+      content: (
+        <div>
+          <p>{`הזמנה חדשה נשלחה למייל ${values.email}`}</p>
+          <p>
+            {
+              "במידה וההזמנה נכונה ותואמת את הדרישות שלך, ניתן להמשיך לדף התשלום."
+            }
+          </p>
+        </div>
+      ),
+      onOk() {
+        return onConfirm({ ...finalValues, orderId: order.id });
+      },
+      onCancel() {},
+      okText: "המשך לדף התשלום",
+      cancelText: "שנה את ההזמנה",
+    });
+  };
+
+  const onConfirm = async (values) => {
     const successUrl = `${window.location.origin}/transactionsuccess`;
     const failureUrl = `${window.location.origin}/transactionfailure`;
     const url = await Payments.launchForm({
       ...values,
-      id: order.id,
+      id: values.orderId,
       successUrl,
       failureUrl,
     });
-    setPaymentUrl(url);
     console.log(url);
-    setLoading(false);
+    return setPaymentUrl(url);
   };
 
   return (
-    <Form
-      layout="vertical"
-      onFinish={onSubmit}
-      onFinishFailed={onFinishFailed}
-      scrollToFirstError
-      onValuesChange={onValuesChange}
-      form={form}
-    >
-      <FormSteps
-        values={values}
-        addSignature={addSignature}
-        signature={signature}
-        loading={loading}
-        paymentUrl={paymentUrl}
-      />
-    </Form>
+    <>
+      {contextHolder}
+      <Form
+        layout="vertical"
+        onFinish={onSubmit}
+        onFinishFailed={onFinishFailed}
+        scrollToFirstError
+        onValuesChange={onValuesChange}
+        form={form}
+      >
+        <FormSteps
+          values={values}
+          addSignature={addSignature}
+          signature={signature}
+          loading={loading}
+          paymentUrl={paymentUrl}
+        />
+      </Form>
+    </>
   );
 };
 
