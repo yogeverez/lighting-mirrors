@@ -7,22 +7,31 @@ const Payment = (props) => {
   const { values, paymentUrl } = props;
   return (
     <Row>
-      <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+      <Col
+        xs={24}
+        sm={24}
+        md={24}
+        lg={24}
+        xl={24}
+        xxl={24}
+        style={{
+          display: isBigScreen ? "flex" : "initial",
+          width: "100%",
+          justifyContent: "center",
+        }}
+      >
         {paymentUrl && (
           <Iframe
             url={paymentUrl}
-            width={isBigScreen ? "450px" : window.innerWidth - 40}
-            height={isBigScreen ? "450px" : "700px"}
+            width={isBigScreen ? "450px" : window.innerWidth - 70}
             styles={{
-              top: "40px",
-              right: isBigScreen ? (window.innerWidth - 450) / 2 : 20,
               background: "#ffffff",
               zIndex: 99999,
+              paddingTop: isBigScreen ? "40px" : "0px",
+              borderWidth: 0,
             }}
             className=""
             display="block"
-            top
-            position="absolute"
           />
         )}
       </Col>
