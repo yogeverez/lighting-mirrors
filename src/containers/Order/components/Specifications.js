@@ -66,7 +66,7 @@ const Specifications = (props) => {
           </div>
           <Spacer horizontal={true} />
           <div style={{ flex: 1 }}>
-            {values.frame === true && (
+            {values.frame === "withFrame" && (
               <RadioButtonItem
                 name={"frame-color"}
                 frameColor={true}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Space, Typography } from "antd";
-import CheckboxItem from "../../../common/forms/CheckboxItem";
 const { Text, Link } = Typography;
 
 const Spec = (props) => {
@@ -67,6 +66,7 @@ const Spec = (props) => {
 
   return (
     <div className="details">
+      <h3 className="summary_title">פרטי המראה</h3>
       <div className="spec">
         {values &&
           arr.map((item) => (

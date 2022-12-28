@@ -5,8 +5,10 @@ import InputNumberItem from "../../../common/forms/InputNumberItem";
 import { useMediaQuery } from "react-responsive";
 import functions from "../../../common/assets/image/mirrors/functions.png";
 import simple from "../../../common/assets/image/mirrors/simple.png";
-import Spec from "./Spec";
-import Pricing from "./Pricing";
+import Spec from "./summary/Spec";
+import Delivery from "./summary/Delivery";
+
+import Pricing from "./summary/Pricing";
 
 const Summary = (props) => {
   const { values, addSignature } = props;
@@ -82,33 +84,56 @@ const Summary = (props) => {
       borderRadius={borderRadius}
     >
       <div className="container">
-        <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
-          <Spec values={values} />
-          <Signature onChangeSignature={onChangeSignature} />
-          <InputNumberItem name={"quantity"} required={true} label={"כמות"} />
-        </div>
-        <div className="outer">
-          <div className="inner">
-            <div className="mirror" />
-            {mirrorWidth && mirrorHeight && technology && (
-              <img
-                src={
-                  technology[0] === "Three color lights" ? simple : functions
-                }
-                style={{
-                  position: "relative",
-                  width: "30px",
-                  height: "15px",
-                  bottom: "25px",
-                }}
-              />
-            )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: isBigScreen ? "row" : "column",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              padding: "0 20px",
+            }}
+          >
+            <Spec values={values} />
+            <Delivery values={values} />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              padding: "0 20px",
+            }}
+          >
+            <Pricing values={values} onChangeSignature={onChangeSignature} />
           </div>
         </div>
       </div>
-      <Pricing />
     </SummaryWrapper>
   );
 };
 
 export default Summary;
+
+{
+  /* <div className="outer">
+  <div className="inner">
+    <div className="mirror" />
+    {mirrorWidth && mirrorHeight && technology && (
+      <img
+        src={technology[0] === "Three color lights" ? simple : functions}
+        style={{
+          position: "relative",
+          width: "30px",
+          height: "15px",
+          bottom: "25px",
+        }}
+      />
+    )}
+  </div>
+</div>; */
+}

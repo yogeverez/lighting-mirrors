@@ -8,12 +8,14 @@ import Payment from "./components/Payment";
 import Summary from "./components/Summary";
 import { parsePhoneNumberFromString } from "libphonenumber-js/max";
 import Heading from "../../common/components/Heading";
+import { useMediaQuery } from "react-responsive";
 
 const { Step } = Steps;
 
 const FormSteps = (props) => {
   const [current, setCurrent] = useState(0);
   const { values, addSignature, signature, paymentUrl, loading } = props;
+  const isBigScreen = useMediaQuery({ query: "(min-width: 991px)" });
 
   useEffect(() => {
     if (paymentUrl && current === 2) {
@@ -43,13 +45,13 @@ const FormSteps = (props) => {
     // },
     {
       index: 1,
-      title: "סיכום",
-      content: <Summary values={values} addSignature={addSignature} />,
+      title: "פרטי משלוח",
+      content: <PersonalDetails />,
     },
     {
       index: 2,
-      title: "פרטי משלוח",
-      content: <PersonalDetails />,
+      title: "סיכום",
+      content: <Summary values={values} addSignature={addSignature} />,
     },
 
     {
@@ -92,10 +94,10 @@ const FormSteps = (props) => {
     //   disabled = !values.technology;
     //   break;
 
-    case 1:
+    case 2:
       disabled = !values.terms || !signature;
       break;
-    case 2:
+    case 1:
       disabled =
         !values.first_name ||
         !values.surename ||
@@ -118,7 +120,9 @@ const FormSteps = (props) => {
           position: "sticky",
           top: 0,
           zIndex: 9999,
-          background: " #f4f4f4",
+          background: "#ffffff",
+          padding: "0 24px 10px 24px",
+          borderBottom: "1px solid #e0e0e0",
         }}
       >
         <Heading content="יצירת מראה מותאמת אישית" as="h1" />
@@ -129,12 +133,33 @@ const FormSteps = (props) => {
         </Steps>
       </div>
 
-      <div className="steps-content">
-        {steps.map((item) => (
-          <div style={{ display: current === item.index ? "initial" : "none" }}>
-            {item.content}
-          </div>
-        ))}
+      <div
+        className="steps-content"
+        style={{
+          height: isBigScreen
+            ? window.innerHeight - 230
+            : window.innerHeight - 350,
+        }}
+      >
+        <div
+          className="steps-inner"
+          style={{
+            width:
+              isBigScreen && current === steps.length - 2
+                ? "800px"
+                : isBigScreen
+                ? "500px"
+                : "100%",
+          }}
+        >
+          {steps.map((item) => (
+            <div
+              style={{ display: current === item.index ? "initial" : "none" }}
+            >
+              {item.content}
+            </div>
+          ))}
+        </div>
       </div>
       <div className="steps-action">
         {current > 0 && (

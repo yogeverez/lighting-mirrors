@@ -74,21 +74,31 @@ export const Content = styled.div`
   }
   .steps-content {
     height: ${(props) => props["contentHeight"]};
-    padding: ${(props) => (props["isBigScreen"] ? "20px" : "10px")};
-
+    padding: ${(props) => (props["isBigScreen"] ? "10px" : "10px")};
+    display: flex;
+    justify-content: center;
+    width: 100%;
     // border: 1px solid #d9d9d9;
-    border: 1px solid #e4e4e4;
-    background: #ffffff;
+    // border-top: 1px solid #e0e0e0;
+    // border-bottom: 1px solid #e0e0e0;
+    background: #f9fafc;
     // border: 1px solid BLACK;
 
-    margin: 10px 0;
-    border-radius: 10px;
+    // margin: 10px 0;
+    // border-radius: 10px;
     // max-height: calc(100vh - 245px);
     // @media (max-width: 689px) {
     //   max-height: calc(100vh - 385px);
     // }
 
     overflow: auto;
+  }
+  .steps-inner {
+    // width: ${(props) => (props["isBigScreen"] ? "500px" : "100%")};
+  }
+  .steps-action {
+    border-top: 1px solid #e0e0e0;
+    padding: 20px 0;
   }
   .modal-inner {
     width: 100%;
@@ -109,7 +119,7 @@ export const Content = styled.div`
   span.ant-radio + * {
     padding-right: 8px;
     padding-left: 8px;
-    border: 1px solid gray;
+    border: 1px solid #38415485;
     padding: 5px 10px;
     border-radius: 5px;
   }
@@ -127,6 +137,7 @@ export const Content = styled.div`
   }
   .ant-form-item-label label {
     font-weight: bold;
+    color: #384154;
   }
 `;
 

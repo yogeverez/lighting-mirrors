@@ -19,18 +19,20 @@ const SimpleModal = (props) => {
         height: window.innerHeight,
         transform: "translate3d(0, 0, 0)",
         overflow: "hidden",
-        background: "#f4f4f4",
+        background: "#ffffff",
         margin: 0,
         maxWidth: "100vw",
         position: "absolute",
         top: 0,
         left: 0,
         zIndex: 9999,
+        padding: 0,
       }}
       bodyStyle={{
         zIndex: 9999,
         boxShadow: "none",
-        background: "#f4f4f4",
+        background: "#ffffff",
+        padding: 0,
       }}
       open={visible}
       footer={null}

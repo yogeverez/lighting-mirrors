@@ -21,6 +21,11 @@ const SummaryWrapper = styled.div`
       // border-radius: 20px;
     }
   }
+  .summary_title {
+    text-align: right;
+    border-bottom: 1px solid #3841542b;
+    color: #384154;
+  }
   .outer {
     flex: 1;
     // width: 50%;

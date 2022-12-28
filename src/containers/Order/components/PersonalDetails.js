@@ -20,7 +20,9 @@ const PersonalDetails = (props) => {
           <div style={{ flex: 1 }}>
             <InputItem name={"surename"} required={true} label={"שם משפחה"} />
           </div>
-          <Spacer horizontal={true} />
+        </ResponsiveItemsWrapper>
+
+        <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
             <InputItem name={"business_name"} label={"חשבונית ע״ש חברה/עסק"} />
           </div>
@@ -34,6 +36,7 @@ const PersonalDetails = (props) => {
             />
           </div>
         </ResponsiveItemsWrapper>
+
         <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
             <AutoCompleteItem
@@ -49,7 +52,9 @@ const PersonalDetails = (props) => {
           <div style={{ flex: 1 }}>
             <InputItem name={"street"} required={true} label={"רחוב"} />
           </div>
-          <Spacer horizontal={true} />
+        </ResponsiveItemsWrapper>
+
+        <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
             <InputItem
               name={"house_number"}
@@ -63,6 +68,7 @@ const PersonalDetails = (props) => {
             <InputItem name={"apartmant_number"} label={"מספר דירה"} />
           </div>
         </ResponsiveItemsWrapper>
+
         <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
             <InputItem name={"floor_number"} label={"מספר קומה"} />
@@ -72,7 +78,9 @@ const PersonalDetails = (props) => {
           <div style={{ flex: 1 }}>
             <InputItem name={"zip"} label={"מיקוד"} />
           </div>
-          <Spacer horizontal={true} />
+        </ResponsiveItemsWrapper>
+
+        <ResponsiveItemsWrapper>
           <div style={{ flex: 1 }}>
             <PhoneNumberItem
               name={"phone"}
@@ -95,10 +103,6 @@ const PersonalDetails = (props) => {
           <div style={{ flex: 1 }}>
             <InputItem name={"delivery_notes"} label={"הערות למשלוח"} />
           </div>
-          <Spacer horizontal={true} />
-          <div style={{ flex: 1 }}></div>
-          <Spacer horizontal={true} />
-          <div style={{ flex: 1 }}></div>
         </ResponsiveItemsWrapper>
       </Col>
     </Row>

@@ -6,7 +6,7 @@ import { useMediaQuery } from "react-responsive";
 const OrderContent = () => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 991px)" });
   const [values, setValues] = useState({});
-
+  console.log(window.innerHeight);
   const contentHeight = isBigScreen
     ? `${window.innerHeight - 270}px`
     : "inherit";
