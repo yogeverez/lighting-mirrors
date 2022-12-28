@@ -24,6 +24,7 @@ const Payment = (props) => {
           <Iframe
             url={paymentUrl}
             width={isBigScreen ? "450px" : window.innerWidth - 70}
+            height={isBigScreen ? "450px" : "700px"}
             styles={{
               background: "#ffffff",
               zIndex: 99999,
