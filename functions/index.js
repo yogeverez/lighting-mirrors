@@ -110,13 +110,12 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   const authorization = `Bearer ${token}`;
   functions.logger.log(authorization);
 
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", `Bearer ${obj.token}`);
-
   var requestOptions = {
     method: "POST",
-    headers: myHeaders,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authorization,
+    },
     body: raw,
     // redirect: "follow",
   };
