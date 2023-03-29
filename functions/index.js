@@ -42,7 +42,11 @@ const getGreenInvoiceToken = async (envirovment) => {
 
   try {
     var response = await fetch(url, requestOptions);
+    functions.logger.log(response);
+
     const result = await response.text();
+    functions.logger.log(result);
+
     return result;
   } catch (error) {
     console.error(error);
