@@ -58,7 +58,6 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     data.envirovment === "development"
       ? "https://sandbox.d.greeninvoice.co.il/api/v1/payments/form"
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
-  console.log(data);
   const values = data.values;
   const items = values.items;
   const shipmentDetails = values.shipmentDetails;
@@ -108,6 +107,8 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   functions.logger.log(orderDetails);
   var raw = JSON.stringify(orderDetails);
   functions.logger.log(raw);
+  functions.logger.log(obj);
+  functions.logger.log(obj.token);
 
   var requestOptions = {
     method: "POST",
@@ -129,6 +130,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     return result;
   } catch (error) {
     console.error(error);
+    functions.logger.log(error);
   }
 });
 
