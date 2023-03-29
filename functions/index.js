@@ -118,7 +118,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: authorization,
+      Authorization: "Bearer " + token,
     },
     body: raw,
     // redirect: "follow",
