@@ -4,6 +4,7 @@ import { initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { Storage } from "@google-cloud/storage";
 import { defineSecret } from "firebase-functions/params";
+import request from "request";
 
 const firebaseServiceAccount = defineSecret("firebase_service_account");
 
@@ -125,18 +126,39 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   };
   functions.logger.log(requestOptions);
 
-  try {
-    var response = await fetch(url, requestOptions);
-    functions.logger.log(response);
+  request(
+    {
+      method: "POST",
+      url: url,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: raw,
+    },
+    async function (error, response, body) {
+      functions.logger.log("Status:", response.statusCode);
+      functions.logger.log("Headers:", JSON.stringify(response.headers));
+      functions.logger.log("Response:", body);
+      const result = await response.text();
+      functions.logger.log(result);
 
-    const result = await response.text();
-    functions.logger.log(result);
+      return result;
+    }
+  );
 
-    return result;
-  } catch (error) {
-    console.error(error);
-    functions.logger.log(error);
-  }
+  // try {
+  //   var response = await fetch(url, requestOptions);
+  //   functions.logger.log(response);
+
+  //   const result = await response.text();
+  //   functions.logger.log(result);
+
+  //   return result;
+  // } catch (error) {
+  //   console.error(error);
+  //   functions.logger.log(error);
+  // }
 });
 
 export const getapikeydetails = functions.https.onCall(
