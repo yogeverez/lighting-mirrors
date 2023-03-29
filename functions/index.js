@@ -115,7 +115,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       Authorization: authorization,
     },
     body: raw,
-    redirect: "follow",
+    // redirect: "follow",
   };
 
   try {
