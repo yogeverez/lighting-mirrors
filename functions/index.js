@@ -58,7 +58,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     data.envirovment === "development"
       ? "https://sandbox.d.greeninvoice.co.il/api/v1/payments/form"
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
-
+  console.log(data);
   const values = data.values;
   const items = values.items;
   const shipmentDetails = values.shipmentDetails;
@@ -66,7 +66,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     return !i.frame ? "no frame" : `${i["frameColor"]} frame`;
   };
   const name =
-    values.businessName && shipmentDetails.businessName !== ""
+    shipmentDetails.businessName && shipmentDetails.businessName !== ""
       ? shipmentDetails.businessName
       : `${shipmentDetails.firstName} ${shipmentDetails.lastName}`;
   const orderDetails = {
