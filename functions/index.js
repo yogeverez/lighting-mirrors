@@ -52,8 +52,6 @@ const getGreenInvoiceToken = async (envirovment) => {
 export const getpaymenturl = functions.https.onCall(async (data, context) => {
   const res = await getGreenInvoiceToken(data.envirovment);
   const obj = JSON.parse(res);
-  functions.logger.log(obj);
-
   var url =
     data.envirovment === "development"
       ? "https://sandbox.d.greeninvoice.co.il/api/v1/payments/form"
@@ -104,17 +102,17 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     //   notifyUrl: "http://localhost:3000",
     custom: values.id,
   };
-  functions.logger.log(orderDetails);
   var raw = JSON.stringify(orderDetails);
-  functions.logger.log(raw);
-  functions.logger.log(obj);
+
   functions.logger.log(obj.token);
+  const authorization = `Bearer ${obj.token}`;
+  functions.logger.log(authorization);
 
   var requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${obj.token}`,
+      Authorization: authorization,
     },
     body: raw,
     redirect: "follow",
