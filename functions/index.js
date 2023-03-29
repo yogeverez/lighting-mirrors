@@ -104,8 +104,10 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   };
   var raw = JSON.stringify(orderDetails);
 
-  functions.logger.log(obj.token);
-  const authorization = `Bearer ${obj.token}`;
+  const token = obj.token;
+  functions.logger.log(token);
+
+  const authorization = `Bearer ${token}`;
   functions.logger.log(authorization);
 
   var requestOptions = {
@@ -117,6 +119,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     body: raw,
     // redirect: "follow",
   };
+  functions.logger.log(requestOptions);
 
   try {
     var response = await fetch(url, requestOptions);
