@@ -60,13 +60,11 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
 
   const values = data.values;
-  const items = data.items;
+  const items = values.items;
   const shipmentDetails = values.shipmentDetails;
-  const frame = !values.frame ? "no frame" : `${values["frame-color"]} frame`;
   const getFrame = (i) => {
-    return !values.frame ? "no frame" : `${values["frame-color"]} frame`;
+    return !i.frame ? "no frame" : `${i["frameColor"]} frame`;
   };
-  const itemDescription = `${values.height} mirror ${values.height}X${values.width} ${frame}`;
   const name =
     values.businessName && shipmentDetails.businessName !== ""
       ? shipmentDetails.businessName
@@ -83,13 +81,13 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     client: {
       //   id: values.id,
       name: name,
-      emails: [values.email],
-      taxId: values.taxId,
-      address: `${values.street} ${values.house_number}`,
-      city: values.city,
-      zip: values.zip,
+      emails: [shipmentDetails.email],
+      taxId: shipmentDetails.taxId,
+      address: `${shipmentDetails.street} ${shipmentDetails.houseNumber}`,
+      city: shipmentDetails.city,
+      zip: shipmentDetails.zip,
       country: "IL",
-      phone: values.phone,
+      phone: shipmentDetails.phone,
       add: true,
     },
     income: items.map((i) => {
@@ -163,7 +161,7 @@ export const sendOrderPdf = functions
     const toMails = agentData.data().mails;
     const ccMails = ccData.data().mails;
     const metadata = object.metadata;
-    const name = `${metadata.first_name} ${metadata.surename}`;
+    const name = `${metadata.firstName} ${metadata.lastName}`;
     const mail = metadata.email;
     const phone = metadata.phone;
     const message = `${name} שלום רב, מצורפת ההזמנה שנחתמה על ידך.`;
