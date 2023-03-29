@@ -60,12 +60,17 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       : "https://api.greeninvoice.co.il/api/v1/payments/form";
 
   const values = data.values;
+  const items = data.items;
+  const shipmentDetails = values.shipmentDetails;
   const frame = !values.frame ? "no frame" : `${values["frame-color"]} frame`;
+  const getFrame = (i) => {
+    return !values.frame ? "no frame" : `${values["frame-color"]} frame`;
+  };
   const itemDescription = `${values.height} mirror ${values.height}X${values.width} ${frame}`;
   const name =
-    values.business_name && values.business_name !== ""
-      ? values.business_name
-      : `${values.first_name} ${values.surename}`;
+    values.businessName && shipmentDetails.businessName !== ""
+      ? shipmentDetails.businessName
+      : `${shipmentDetails.firstName} ${shipmentDetails.lastName}`;
   const orderDetails = {
     description: "מראה מוארת וחכמה בהתאמה אישית",
     type: 320,
@@ -87,16 +92,15 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       phone: values.phone,
       add: true,
     },
-    income: [
-      {
-        //   catalogNum: "MXDFSDD",
-        description: itemDescription,
+    income: items.map((i) => {
+      return {
+        description: `${i.height} mirror ${i.height}X${i.width} ${getFrame(i)}`,
         quantity: 1,
         price: 20,
         currency: "ILS",
         vatType: 1,
-      },
-    ],
+      };
+    }),
     remarks: "Some remarks",
     successUrl: values.successUrl,
     failureUrl: values.failureUrl,
