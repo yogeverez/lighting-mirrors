@@ -136,14 +136,11 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       },
       body: raw,
     },
-    async function (error, response, body) {
+    function (error, response, body) {
       functions.logger.log("Status:", response.statusCode);
       functions.logger.log("Headers:", JSON.stringify(response.headers));
       functions.logger.log("Response:", body);
-      const result = await response.text();
-      functions.logger.log(result);
-
-      return result;
+      return body;
     }
   );
 
