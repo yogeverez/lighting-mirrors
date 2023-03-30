@@ -123,7 +123,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   };
   functions.logger.log(requestOptions);
 
-  request(
+  return request(
     {
       method: "POST",
       url: url,
