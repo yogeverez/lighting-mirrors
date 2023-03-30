@@ -74,7 +74,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     lang: "he",
     currency: "ILS",
     vatType: 0,
-    amount: 20,
+    amount: values.totalPrice,
     maxPayments: 1,
     pluginId: "d766df78-fb97-4ac5-a95f-af3787849a3b",
     client: {
@@ -92,8 +92,8 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     income: items.map((i) => {
       return {
         description: i.description,
-        quantity: 1,
-        price: 20,
+        quantity: i.quantity,
+        price: i.quantity * i.price,
         currency: "ILS",
         vatType: 1,
       };
@@ -122,6 +122,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     // redirect: "follow",
   };
   functions.logger.log(requestOptions);
+  functions.logger.log(raw);
 
   return request(
     {
@@ -134,9 +135,11 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
       body: raw,
     },
     function (error, response, body) {
-      functions.logger.log("Status:", response.statusCode);
-      functions.logger.log("Headers:", JSON.stringify(response.headers));
-      functions.logger.log("Response:", body);
+      // functions.logger.log("Status:", response.statusCode);
+      // functions.logger.log("Headers:", JSON.stringify(response.headers));
+      functions.logger.log(response);
+      functions.logger.log(body);
+
       return body;
     }
   );
