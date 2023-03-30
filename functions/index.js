@@ -76,7 +76,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     vatType: 0,
     amount: 20,
     maxPayments: 1,
-    pluginId: "1a30a11e-ed83-4131-bc89-a7b82b1c826b",
+    pluginId: "d766df78-fb97-4ac5-a95f-af3787849a3b",
     client: {
       //   id: values.id,
       name: name,
