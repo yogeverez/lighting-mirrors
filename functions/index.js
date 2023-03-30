@@ -64,9 +64,6 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   const values = data.values;
   const items = values.items;
   const shipmentDetails = values.shipmentDetails;
-  const getFrame = (i) => {
-    return !i.frame ? "no frame" : `${i["frameColor"]} frame`;
-  };
   const name =
     shipmentDetails.businessName && shipmentDetails.businessName !== ""
       ? shipmentDetails.businessName
@@ -94,7 +91,7 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     },
     income: items.map((i) => {
       return {
-        description: `${i.height} mirror ${i.height}X${i.width} ${getFrame(i)}`,
+        description: i.description,
         quantity: 1,
         price: 20,
         currency: "ILS",
