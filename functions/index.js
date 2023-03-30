@@ -110,10 +110,10 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
   var raw = JSON.stringify(orderDetails);
 
   const token = obj.token;
-  functions.logger.log(token);
+  // functions.logger.log(token);
 
   const authorization = `Bearer ${token}`;
-  functions.logger.log(authorization);
+  // functions.logger.log(authorization);
 
   var requestOptions = {
     method: "POST",
@@ -124,41 +124,41 @@ export const getpaymenturl = functions.https.onCall(async (data, context) => {
     body: raw,
     // redirect: "follow",
   };
-  functions.logger.log(requestOptions);
-  functions.logger.log(raw);
+  // functions.logger.log(requestOptions);
+  // functions.logger.log(raw);
 
-  return request(
-    {
-      method: "POST",
-      url: url,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: raw,
-    },
-    function (error, response, body) {
-      // functions.logger.log("Status:", response.statusCode);
-      // functions.logger.log("Headers:", JSON.stringify(response.headers));
-      functions.logger.log(response);
-      functions.logger.log(body);
+  // return request(
+  //   {
+  //     method: "POST",
+  //     url: url,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + token,
+  //     },
+  //     body: raw,
+  //   },
+  //   function (error, response, body) {
+  //     // functions.logger.log("Status:", response.statusCode);
+  //     // functions.logger.log("Headers:", JSON.stringify(response.headers));
+  //     functions.logger.log(response);
+  //     functions.logger.log(body);
 
-      return body;
-    }
-  );
+  //     return body;
+  //   }
+  // );
 
-  // try {
-  //   var response = await fetch(url, requestOptions);
-  //   functions.logger.log(response);
+  try {
+    var response = await fetch(url, requestOptions);
+    functions.logger.log(response);
 
-  //   const result = await response.text();
-  //   functions.logger.log(result);
+    const result = await response.text();
+    functions.logger.log(result);
 
-  //   return result;
-  // } catch (error) {
-  //   console.error(error);
-  //   functions.logger.log(error);
-  // }
+    return result;
+  } catch (error) {
+    console.error(error);
+    functions.logger.log(error);
+  }
 });
 
 export const getapikeydetails = functions.https.onCall(
